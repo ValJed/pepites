@@ -1,0 +1,75 @@
+@keyframes arrowHover {
+  0% {
+    // transform: translateY(0);
+    bottom: 0;
+  }
+
+  // 50% {
+  //   transform: translateY(1rem);
+  // }
+
+  100% {
+    // transform: translateY(1rem);
+    bottom: -1rem
+  }
+}
+
+.diamonds-container {
+  height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  > svg {
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    transform: rotate(180deg);
+  }
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: 10rem;
+    &:hover {
+      cursor: pointer;
+      .arrow {
+        animation: .5s linear 0s infinite alternate forwards arrowHover;
+      }
+    }
+    span {
+      font-size: 2rem;
+      text-transform: uppercase;
+      color: &primary;
+    }
+    .arrow {
+      position: relative;
+      width: 5rem;
+      height: 4rem;
+      margin-top: 1rem;
+      // transform: translateY(0);
+      bottom: 0;
+      transition: bottom .3s linear;
+    }
+  }
+
+}
+
+.artists-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .logo {
+    width: 5rem;
+    height: 5rem;
+    margin: 5rem 0 6rem;
+  }
+
+  .artists {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
