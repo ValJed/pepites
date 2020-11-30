@@ -1,7 +1,7 @@
 const { ObjectID } = require('mongodb')
 
-const repository = (db) => {
-  const UsersDb = db.collection('users')
+module.exports = (db) => {
+  const UsersDb = db.collection('artists')
 
   return {
     find: () => UsersDb.find().toArray(),
@@ -32,5 +32,3 @@ const repository = (db) => {
       { returnOriginal: false })
   }
 }
-
-module.exports = repository

@@ -1,7 +1,7 @@
 const pino = require('pino')
 const isDev = process.env.NODE_ENV === 'development'
 
-const logger = ({
+module.exports = ({
   name = 'blog',
   level = 'info',
   enabled = true
@@ -14,5 +14,3 @@ const logger = ({
     ...isDev ? { prettyPrint: { colorize: true } } : {}
   }, pino.destination())
 }
-
-module.exports = logger

@@ -1,6 +1,12 @@
 const express = require('express')
 
-export default () => {
+module.exports = ({
+  services: {
+    artist: artistService,
+    user: userService
+  },
+  log
+}) => {
   const router = new express.Router()
 
   const verifyToken = async (req, res, next) => {
@@ -11,7 +17,7 @@ export default () => {
     }
 
     const token = authorization.replace('Bearer ', '')
-    // const valid = await userService.verify(token)
+    const valid = await userService.verify(token)
 
     if (!valid) {
       return res.status(401).send()
@@ -24,6 +30,7 @@ export default () => {
   router.post('/login', async (req, res) => {
     try {
       const data = req.body
+
       const response = await userService.login(data)
 
       if (response.success) {
@@ -54,11 +61,7 @@ export default () => {
 
       const response = await userService.create(data)
 
-      if (response.success) {
-        res.status(201).send(response)
-      } else {
-        res.status(400).send(response)
-      }
+      res.status(201).send(response)
     } catch (err) {
       log.error(err)
       res.status(500).send(err.message)

@@ -41,13 +41,23 @@ export default {
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
-    'nuxt-svg-loader'
+    'nuxt-svg-loader',
+    '@nuxtjs/axios'
   ],
 
-  serverMiddleware: [
-    // Will register file from project api directory to handle /api/* requires
-    { path: '/api', handler: '~/api/app/index.js' }
-  ],
+  axios: {
+    proxy: true, // Can be also an object with default options
+    prefix: '/api'
+  },
+
+  proxy: {
+    '/api/': 'http://localhost:4000'
+  },
+
+  // serverMiddleware: [
+  //   // Will register file from project api directory to handle /api/* requires
+  //   { path: '/api', handler: '~/api/app/index.js' }
+  // ],
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {

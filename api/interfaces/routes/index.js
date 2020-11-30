@@ -1,4 +1,4 @@
-import users from './users'
-import artists from './artists'
+const users = require('./users')
+const artists = require('./artists')
 
-export default [users, artists]
+module.exports = [users, artists]

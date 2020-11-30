@@ -34,7 +34,7 @@ const encryptFileName = (fileName) => {
   console.error('This type of file is not supported !')
 }
 
-export default {
+module.exports = {
   encryptPsw,
   comparePsw,
   encryptFileName

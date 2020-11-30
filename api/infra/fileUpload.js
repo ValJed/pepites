@@ -1,6 +1,6 @@
 const multer = require('multer')
 
-module.exports = ({ path }, encrypt, cloud) => {
+module.exports = () => {
   // const storage = multer.diskStorage({
   //   destination: (req, file, cb) => {
 

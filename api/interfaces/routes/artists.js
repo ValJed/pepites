@@ -1,11 +1,21 @@
 // const express = require('express')
-import express from 'express'
+const express = require('express')
 
-export default () => {
+module.exports = ({
+  services: {
+    artist: artistService
+  }
+}) => {
   const router = express.Router()
 
   router.get('/artists', async (req, res, next) => {
-    console.log('req ===> ', require('util').inspect(req, { colors: true, depth: 2 }))
+    try {
+      const artists = artistService.getArtists()
+
+      res.status(200).send(artists)
+    } catch (err) {
+      res.status(err.status || 500).send(err.error)
+    }
   })
 
   return router

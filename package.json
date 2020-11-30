@@ -3,16 +3,24 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nuxt dev",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate"
+    "generate": "nuxt generate",
+    "api": "NODE_ENV=development nodemon ./api/app/index.js"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.12.2",
+    "config": "^3.3.3",
     "core-js": "^3.6.5",
+    "cors": "^2.8.5",
     "helmet": "^4.2.0",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.3",
-    "nuxt": "^2.14.6"
+    "multer": "^1.4.2",
+    "nuxt": "^2.14.6",
+    "pino": "^6.7.0",
+    "vue-notifications": "^1.0.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^5.0.0",
@@ -21,6 +29,8 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^7.13.0",
     "eslint-plugin-nuxt": "^2.0.0",
-    "nuxt-svg-loader": "^1.2.0"
+    "nodemon": "^2.0.6",
+    "nuxt-svg-loader": "^1.2.0",
+    "pino-pretty": "^4.3.0"
   }
 }

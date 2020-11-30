@@ -9,3 +9,17 @@ a {
   color: auto;
   text-decoration: none;
 }
+
+input[type="text"], input[type="password"] {
+  background-color: $primary;
+  border-radius: .2rem;
+  padding: 0.2rem;
+  color: $white;
+}
+
+button, button[type="submit"] {
+  background-color: $primary;
+  color: $white;
+  padding: .5rem;
+  margin-top: .7rem;
+}

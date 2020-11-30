@@ -60,7 +60,6 @@ export default {
     }
   },
   mounted () {
-    console.log('this.$vuetify ===> ', this.$vuetify.theme)
     const screenWidth = window.innerWidth
     const screenHeight = window.innerHeight
     const diamondsContainer = this.$refs.diamonds

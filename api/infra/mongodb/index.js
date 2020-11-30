@@ -14,6 +14,11 @@ const connect = async ({
     await client.connect()
 
     db = client.db(database)
+
+    return {
+      client,
+      db
+    }
   }
 }
 
@@ -21,7 +26,7 @@ const disconnect = async () => {
   await client.close()
 }
 
-export default {
+module.exports = {
   client: () => client,
   db: () => db,
   connect,
