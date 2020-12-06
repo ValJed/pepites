@@ -115,9 +115,9 @@ module.exports = ({
     const user = await userRepo.findByUsername(username)
 
     if (!user) {
-      return {
-        success: false,
-        error: 'No user found with this username'
+      throw {
+        status: 400,
+        error: 'This username doesn\'t match any account'
       }
     }
 
@@ -127,31 +127,25 @@ module.exports = ({
       user.password.salt
     )
 
-    if (isPasswordValid) {
-      const projects = await projectRepo.findAll()
-
-      delete user.password
-
-      return {
-        success: true,
-        token: jwt.signin(user._id),
-        projects,
-        user
+    if (!isPasswordValid) {
+      throw {
+        status: 400,
+        error: 'This password is not valid'
       }
     }
 
+    delete user.password
+
+    const token = jwt.signin(user._id)
+
     return {
-      success: false,
-      error: 'Password isn\'t valid'
+      token,
+      user
     }
   }
 
   const verify = (token) => {
-    const isTokenValid = jwt.verify(token)
-
-    return {
-      success: !!isTokenValid
-    }
+    jwt.verify(token)
   }
 
   const sendUserMail = ({ subject, email, message }) => {

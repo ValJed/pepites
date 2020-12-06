@@ -1,39 +1,104 @@
 <template>
-  <div class="login-container">
-    <form @submit.prevent="login(username, psw)">
-      <label for="">Username</label>
-      <input v-model="username" type="text">
-      <label for="">Password</label>
-      <input v-model="psw" type="password">
-      <button type="submit">
+  <div class="page-login">
+    <v-form @submit.prevent="login(form.username, form.psw)">
+      <v-text-field
+        v-model="form.username"
+        label="Username"
+        :rules="rules.username"
+        small
+        required
+      />
+      <v-text-field
+        v-model="form.psw"
+        label="Password"
+        :rules="rules.psw"
+        small
+        required
+      />
+
+      <v-btn
+        type="submit"
+        color="primary"
+        :loading="loading"
+      >
         Login
-      </button>
-    </form>
+      </v-btn>
+    </v-form>
+    <v-snackbar
+      v-model="snackbar.show"
+      timeout="5000"
+      right
+    >
+      {{ snackbar.msg }}
+      <template #action="{ attrs }">
+        <v-btn
+          color="primary"
+          text
+          v-bind="attrs"
+          @click="snackbar.show = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
 <script>
 
 export default {
-  data () {
-    return {
+  data: () => ({
+    loading: false,
+    form: {
       username: '',
       psw: ''
+    },
+    rules: {
+      username: [
+        val => !!val || 'Username is required'
+      // (val) => {
+      //   const regex = /^[^\s]+@\w+\.\w+$/
+      //   return regex.test(val) || 'Invalid Email'
+      // }
+      ],
+      psw: [
+        val => !!val || 'Password is required'
+      ]
+    },
+    snackbar: {
+      show: false,
+      msg: ''
     }
-  },
+  }),
   methods: {
     async login (username, password) {
       try {
-        const res = await this.$axios.post('/login', {
-          data: {
-            username,
-            password
-          }
+        this.loading = true
+        const { data, status } = await this.$axios.post('/login', {
+          username,
+          password
         })
 
-        console.log('res ===> ', res)
-      } catch (err) {
-        console.error('err ===> ', err)
+        if (status === 200) {
+          const date = new Date()
+          date.setDate(date.getDate() + 1)
+
+          console.log('data.token ===> ', data.token)
+          document.cookie = `pep-token=${data.token}; expires=${date};`
+
+          this.$router.push({ path: '/admin' })
+        }
+
+        this.loading = false
+
+        // Notify user
+      } catch ({ response }) {
+        this.loading = false
+
+        console.log('response ===> ', response)
+
+        this.snackbar.msg = response.data
+        this.snackbar.show = true
       }
     }
   }

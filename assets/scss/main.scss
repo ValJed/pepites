@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 ul {
   padding-left: 0;
   li {
@@ -10,16 +14,23 @@ a {
   text-decoration: none;
 }
 
-input[type="text"], input[type="password"] {
-  background-color: $primary;
-  border-radius: .2rem;
-  padding: 0.2rem;
-  color: $white;
+.circle-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 100%;
+  background-color: #fff;
 }
 
-button, button[type="submit"] {
-  background-color: $primary;
-  color: $white;
-  padding: .5rem;
-  margin-top: .7rem;
-}
+// input[type="text"], input[type="password"] {
+//   background-color: $primary;
+//   border-radius: .2rem;
+//   padding: 0.2rem;
+//   color: $white;
+// }
+
+// button, button[type="submit"] {
+//   background-color: $primary;
+//   color: $white;
+//   padding: .5rem;
+//   margin-top: .7rem;
+// }

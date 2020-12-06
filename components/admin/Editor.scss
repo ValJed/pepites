@@ -1,0 +1,19 @@
+.editor {
+  .editor-menu {
+    color: $primary;
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+  .editor-content {
+    padding-top: 2rem;
+    max-height: 30rem;
+    overflow: auto;
+    appearance: textarea;
+
+    .ProseMirror {
+      outline: none;
+      min-height: 100%;
+      min-height: 15rem;
+    }
+  }
+}

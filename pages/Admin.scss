@@ -1,0 +1,13 @@
+.page-admin {
+  min-height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+
+  aside {
+    h3 {
+      text-align: center;
+      margin: .3rem 0;
+    }
+  }
+}

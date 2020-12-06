@@ -1,0 +1,50 @@
+.container {
+  overflow: auto;
+
+  .form-header {
+    &-img {
+      position: relative;
+
+      .img {
+        width: 100%;
+        height: 100%;
+        background-color: #eee;
+        background-position: center;
+        background-size: cover;
+      }
+
+      button {
+        position: absolute;
+        bottom: -.4rem;
+        left: -.4rem;
+        width: 2.7rem;
+        height: 2.7rem;
+        background-color: #fff;
+        border-radius: 100%;
+
+        input[type="file"] {
+          cursor: pointer;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+        }
+      }
+    }
+  }
+
+  .videos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 22rem;
+    overflow: auto;
+    > div {
+      margin: 10px 0;
+    }
+  }
+}

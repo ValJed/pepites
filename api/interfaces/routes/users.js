@@ -10,20 +10,27 @@ module.exports = ({
   const router = new express.Router()
 
   const verifyToken = async (req, res, next) => {
-    const { authorization } = req.headers
+    try {
+      const { cookie } = req.headers
 
-    if (!authorization || !authorization.includes('Bearer ')) {
+      console.log('cookie ===> ', require('util').inspect(cookie, { colors: true, depth: 2 }))
+
+      const regex = /\pep-token=[^\s]+/
+
+      const [tokenWithKey] = cookie.match(regex) || []
+
+      if (!tokenWithKey) {
+        return res.status(401).send()
+      }
+
+      const token = tokenWithKey.replace('pep-token=', '').replace(';', '')
+
+      await userService.verify(token)
+
+      next()
+    } catch (err) {
       return res.status(401).send()
     }
-
-    const token = authorization.replace('Bearer ', '')
-    const valid = await userService.verify(token)
-
-    if (!valid) {
-      return res.status(401).send()
-    }
-
-    next()
   }
 
   // Login user
@@ -33,14 +40,10 @@ module.exports = ({
 
       const response = await userService.login(data)
 
-      if (response.success) {
-        res.status(200).send(response)
-      } else {
-        res.status(401).send(response)
-      }
+      res.status(200).send(response)
     } catch (err) {
       log.error(err)
-      res.status(500).send(err.message)
+      res.status(err.status || 500).send(err.error || err)
     }
   })
 

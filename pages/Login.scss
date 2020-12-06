@@ -1,4 +1,4 @@
-.login-container {
+.page-login {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,12 +8,16 @@
     display: flex;
     flex-direction: column;
 
-    label {
-      margin-bottom: .2rem;
+    button {
+      margin-top: .5rem;
     }
 
-    input {
-      margin-bottom: .5rem;
-    }
+    // label {
+    //   margin-bottom: .2rem;
+    // }
+
+    // input {
+    //   margin-bottom: .5rem;
+    // }
   }
 }
