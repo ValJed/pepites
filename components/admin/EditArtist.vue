@@ -1,5 +1,5 @@
 <template>
-  <v-form @submit.prevent="createArtist()">
+  <div>
     <v-row class="form-header">
       <v-col
         classs="form-header-infos"
@@ -84,38 +84,65 @@
     <v-row>
       <v-col>
         <h3>Releases</h3>
+        <v-text-field
+          v-model="releasesInput"
+          label="Add a release"
+          @keyup.enter="addRelease"
+        />
         <div class="releases">
+          <div
+            v-for="(release, index) in artist.releases"
+            :key="index"
+            v-html="release"
+          />
+          <!-- <SoundcloudPlayer />
           <SoundcloudPlayer />
-          <SoundcloudPlayer />
-          <SoundcloudPlayer />
+          <SoundcloudPlayer /> -->
         </div>
       </v-col>
-      <v-col>
+      <v-col class="events">
         <h3>Events</h3>
+        <v-dialog
+          max-width="350"
+        >
+          <template #activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              Create Event
+            </v-btn>
+          </template>
+          <EditEvent add-event="addEvent" />
+        </v-dialog>
       </v-col>
     </v-row>
     <v-btn
       type="submit"
       color="primary"
-      bottom="1rem"
-      right="1rem"
+      bottom
+      right
       fixed
     >
       Create
     </v-btn>
-  </v-form>
+  </div>
 </template>
 
 <script>
 import Editor from '@/components/admin/Editor'
 import YoutubePlayer from '@/components/common/YoutubePlayer'
-import SoundcloudPlayer from '@/components/common/SoundcloudPlayer'
+import EditEvent from '@/components/admin/EditEvent'
+// import SoundcloudPlayer from '@/components/common/SoundcloudPlayer'
 
 export default {
   components: {
     Editor,
     YoutubePlayer,
-    SoundcloudPlayer
+    EditEvent
+    // SoundcloudPlayer
   },
   props: {
     initialArtist: {
@@ -150,11 +177,18 @@ export default {
       },
       videos: {
         youtube: []
-      }
+      },
+      releases: [],
+      events: []
       // ...this.initialArtist
     },
     imagePreview: null,
     videoInput: '',
+    releasesInput: '',
+    eventNameInput: '',
+    eventLocationInput: '',
+    eventLinkInput: '',
+    eventDateInput: null,
     urlRegex: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/
   }),
   watch: {
@@ -190,6 +224,15 @@ export default {
         val,
         ...this.artist.videos.youtube
       ]
+    },
+    addRelease ({ target: { value } }) {
+      this.artist.releases = [
+        value,
+        ...this.artist.releases
+      ]
+    },
+    addEvent () {
+      console.log('=============> HERE <================')
     },
     createArtist () {
       console.log('this.artist ===> ', this.artist)

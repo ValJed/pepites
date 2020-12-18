@@ -124,7 +124,6 @@
     </editor-menu-bar>
     <editor-content
       ref="editor"
-      :style="{ height: `${editorHeight}px` }"
       class="editor-content artist-content"
       :editor="editor"
       @change="updateContent(content)"
