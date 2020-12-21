@@ -103,6 +103,7 @@
       <v-col class="events">
         <h3>Events</h3>
         <v-dialog
+          v-model="modalOpened"
           max-width="350"
         >
           <template #activator="{ on, attrs }">
@@ -115,8 +116,18 @@
               Create Event
             </v-btn>
           </template>
-          <EditEvent add-event="addEvent" />
+          <EditEvent
+            :add-event="addEvent"
+            :close-modal="closeModal"
+          />
         </v-dialog>
+        <ul>
+          <li v-for="(event, i) in artist.events" :key="i">
+            <h3>{{ event.name }}</h3>
+            <p>{{ event.location }}</p>
+            <a :src="event.link" target="_blank">Lien Facebook</a>
+          </li>
+        </ul>
       </v-col>
     </v-row>
     <v-btn
@@ -125,6 +136,7 @@
       bottom
       right
       fixed
+      @click="createArtist(artist)"
     >
       Create
     </v-btn>
@@ -135,6 +147,7 @@
 import Editor from '@/components/admin/Editor'
 import YoutubePlayer from '@/components/common/YoutubePlayer'
 import EditEvent from '@/components/admin/EditEvent'
+// import { urlRegex } from '@/utils'
 // import SoundcloudPlayer from '@/components/common/SoundcloudPlayer'
 
 export default {
@@ -163,6 +176,10 @@ export default {
         },
         dates: []
       })
+    },
+    createArtist: {
+      type: Function,
+      required: true
     }
   },
   data: () => ({
@@ -185,11 +202,7 @@ export default {
     imagePreview: null,
     videoInput: '',
     releasesInput: '',
-    eventNameInput: '',
-    eventLocationInput: '',
-    eventLinkInput: '',
-    eventDateInput: null,
-    urlRegex: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/
+    modalOpened: false
   }),
   watch: {
     initialArtist (newVal, oldVal) {
@@ -208,6 +221,9 @@ export default {
     }
   },
   methods: {
+    closeModal () {
+      this.modalOpened = false
+    },
     fileChange ({ target }) {
       const [file] = target.files
       this.imagePreview = URL.createObjectURL(file)
@@ -231,11 +247,9 @@ export default {
         ...this.artist.releases
       ]
     },
-    addEvent () {
-      console.log('=============> HERE <================')
-    },
-    createArtist () {
-      console.log('this.artist ===> ', this.artist)
+    addEvent (data) {
+      console.log('data ===> ', data)
+      this.artist.events.push(data)
     }
   }
 }

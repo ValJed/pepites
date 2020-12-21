@@ -48,6 +48,20 @@
     }
   }
 
+  .events {
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      li {
+        background-color: $primary;
+        border-radius: 0.5rem;
+        margin: .6rem;
+        padding: .3rem;
+        color: #fff;
+      }
+    }
+  }
+
   // .events {
   //   .date-picker {
   //     position: fixed;

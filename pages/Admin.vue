@@ -16,11 +16,15 @@
           active-class="#eee"
         >
           <v-list-item>
-            <v-list-item-title>Add new artist</v-list-item-title>
+            <v-list-item-title>
+              Add new artist
+            </v-list-item-title>
           </v-list-item>
 
           <v-list-item v-for="artist in artists" :key="artist.id">
-            <v-list-item-title>{{ artist.name }}</v-list-item-title>
+            <v-list-item-title>
+              {{ artist.name }}
+            </v-list-item-title>
             <v-list-item-icon>
               <v-icon v-text="'mdi-delete-empty'" />
             </v-list-item-icon>
@@ -29,7 +33,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-container>
-      <EditArtist :artist="selectedArtist" />
+      <EditArtist :artist="selectedArtist" :create-artist="createArtist" />
     </v-container>
   </div>
 </template>
@@ -39,7 +43,6 @@ import EditArtist from '@/components/admin/EditArtist'
 // import { apiConfig } from '@/utils/config'
 
 export default {
-  // layout: 'admin',
   components: {
     EditArtist
   },
@@ -67,13 +70,12 @@ export default {
       this.selectedProject = project
     },
 
+    createArtist (artist) {
+      console.log('artist ===> ', artist)
+    },
+
     showCrendentialsModal () {
       this.$refs.credentialsModal.showModal()
-      // bus.$emit('show-modal', {
-      //   title: 'Modify crendentials ?',
-      //   action: this.deleteProject,
-      //   params: id
-      // })
     },
 
     updateCrendentials (data) {

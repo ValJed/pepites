@@ -83,7 +83,6 @@ export default {
           const date = new Date()
           date.setDate(date.getDate() + 1)
 
-          console.log('data.token ===> ', data.token)
           document.cookie = `pep-token=${data.token}; expires=${date};`
 
           this.$router.push({ path: '/admin' })
@@ -95,8 +94,6 @@ export default {
       } catch ({ response }) {
         this.loading = false
 
-        console.log('response ===> ', response)
-
         this.snackbar.msg = response.data
         this.snackbar.show = true
       }
@@ -104,4 +101,5 @@ export default {
   }
 }
 </script>
+
 <style src="./Login.scss" scoped lang='scss'></style>
