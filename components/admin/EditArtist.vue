@@ -42,6 +42,7 @@
     </v-row>
     <client-only>
       <Editor
+        :id="artist._id"
         :content="artist.content"
         :update-content="updateContent"
       />
@@ -131,7 +132,6 @@
       </v-col>
     </v-row>
     <v-btn
-      type="submit"
       color="primary"
       bottom
       right
@@ -150,6 +150,23 @@ import EditEvent from '@/components/admin/EditEvent'
 // import { urlRegex } from '@/utils'
 // import SoundcloudPlayer from '@/components/common/SoundcloudPlayer'
 
+const emptyArtist = {
+  name: '',
+  genre: '',
+  content: '',
+  socialLinks: {
+    facebook: '',
+    instagram: '',
+    youtube: ''
+  },
+  videos: {
+    youtube: []
+  },
+  releases: [],
+  events: []
+  // ...this.selectedArtist
+}
+
 export default {
   components: {
     Editor,
@@ -158,24 +175,9 @@ export default {
     // SoundcloudPlayer
   },
   props: {
-    initialArtist: {
+    selectedArtist: {
       type: Object,
-      default: () => ({
-        name: '',
-        genre: '',
-        content: '',
-        image: null,
-        socialLinks: {
-          facebook: null,
-          instagram: null,
-          youtube: null
-        },
-        releases: [],
-        videos: {
-          youtube: []
-        },
-        dates: []
-      })
+      default: null
     },
     createArtist: {
       type: Function,
@@ -184,20 +186,7 @@ export default {
   },
   data: () => ({
     artist: {
-      name: '',
-      genre: '',
-      content: '',
-      socialLinks: {
-        facebook: '',
-        instagram: '',
-        youtube: ''
-      },
-      videos: {
-        youtube: []
-      },
-      releases: [],
-      events: []
-      // ...this.initialArtist
+      ...emptyArtist
     },
     imagePreview: null,
     videoInput: '',
@@ -205,19 +194,10 @@ export default {
     modalOpened: false
   }),
   watch: {
-    initialArtist (newVal, oldVal) {
-      console.log('oldVal ===> ', oldVal)
-      console.log('newVal ===> ', newVal)
-      // if (newVal) {
-      //   this.project = newVal
-      // } else {
-      //   this.project = {
-      //     name: '',
-      //     description: '',
-      //     imgUrl: '',
-      //     content: ''
-      //   }
-      // }
+    selectedArtist (newVal, oldVal) {
+      this.artist = newVal || {
+        ...emptyArtist
+      }
     }
   },
   methods: {

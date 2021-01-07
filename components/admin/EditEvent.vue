@@ -89,9 +89,9 @@ export default {
       this.validate()
 
       if (this.valid) {
-        this.addEvent(form)
-        this.$refs.form.reset()
+        this.addEvent({ ...form })
         this.closeModal()
+        this.$refs.form.reset()
       }
     }
   }

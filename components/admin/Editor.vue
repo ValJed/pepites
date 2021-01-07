@@ -170,7 +170,6 @@ export default {
   },
   data () {
     return {
-      // editorHeight: 0,
       editor: new Editor({
         extensions: [
           new Blockquote(),

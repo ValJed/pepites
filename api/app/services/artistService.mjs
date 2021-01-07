@@ -11,34 +11,35 @@ export default ({
   log
 }) => {
   const getArtists = async (id) => {
-    const projects = await artistRepo.findAll()
+    const artists = await artistRepo.findAll()
 
     if (!id) {
-      return projects
+      return artists
     }
 
-    const project = projects
+    const artist = artists
       .find(project => project._id.toString() === id)
 
+    return artist
+  }
+
+  const addArtist = async (artist) => {
+    const createdArtist = await artistRepo.create(artist)
+
+    if (!createdArtist.result.ok) {
+      throw new Error('Artist couldn\'t have been created')
+    }
+
+    console.log('createdArtist ===> ', createdArtist)
+
     return {
-      project,
-      projects: projects.filter(project => !project.isAbout)
+      _id: createdArtist.insertedId,
+      ...artist
     }
   }
 
-  const addArtist = async (project) => {
-    // const project = ProjectEntity(projectData)
-
-    const createdProject = await artistRepo.createArtist(project)
-
-    if (!createdProject.result.ok) {
-      throw new Error('Project couldn\'t have been created')
-    }
-
-    return {
-      _id: createdProject.insertedId,
-      ...project
-    }
+  const updateArtist = async (artist) => {
+    const updatedArtist = await artistRepo.update(artist)
   }
 
   return {

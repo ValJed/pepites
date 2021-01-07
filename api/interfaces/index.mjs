@@ -23,7 +23,6 @@ export default ({
   app.use('/api', express.static('public'))
   app.use(helmet())
   app.use(cors(corsConfig))
-  app.use(errors())
 
   app.use('/api', routes.map((route) => {
     return route({
@@ -33,6 +32,9 @@ export default ({
       log
     })
   }))
+
+  // Manage Celebrate validation errors
+  app.use(errors())
 
   // Listening
   const server = app.listen(serverConfig.port, () => {
