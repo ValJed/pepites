@@ -7,13 +7,15 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "api": "NODE_ENV=development nodemon ./api/app/index.js"
+    "api": "NODE_ENV=development nodemon -r esm ./api/app/index.mjs"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.12.2",
+    "@nuxtjs/axios": "^5.12.5",
+    "celebrate": "^13.0.4",
     "config": "^3.3.3",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
+    "esm": "^3.2.25",
     "helmet": "^4.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.3",

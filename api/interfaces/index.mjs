@@ -1,9 +1,12 @@
-const express = require('express')
-const cors = require('cors')
-const helmet = require('helmet')
-const routes = require('./routes')
+import express from 'express'
+import cors from 'cors'
+import helmet from 'helmet'
+import celebration from 'celebrate'
+import routes from './routes'
 
-module.exports = ({
+const { errors } = celebration
+
+export default ({
   config: {
     serverConfig,
     corsConfig
@@ -20,6 +23,7 @@ module.exports = ({
   app.use('/api', express.static('public'))
   app.use(helmet())
   app.use(cors(corsConfig))
+  app.use(errors())
 
   app.use('/api', routes.map((route) => {
     return route({

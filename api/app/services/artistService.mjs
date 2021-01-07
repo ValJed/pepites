@@ -1,5 +1,5 @@
 
-module.exports = ({
+export default ({
   // usersRepo,
   artistRepo,
   imageRepo,
@@ -26,8 +26,8 @@ module.exports = ({
     }
   }
 
-  const addArtist = async (projectData) => {
-    const project = ProjectEntity(projectData)
+  const addArtist = async (project) => {
+    // const project = ProjectEntity(projectData)
 
     const createdProject = await artistRepo.createArtist(project)
 

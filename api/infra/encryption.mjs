@@ -1,4 +1,4 @@
-const crypto = require('crypto')
+import crypto from 'crypto'
 
 const encryptPsw = (password) => {
   const salt = crypto.randomBytes(16).toString('hex')
@@ -34,7 +34,7 @@ const encryptFileName = (fileName) => {
   console.error('This type of file is not supported !')
 }
 
-module.exports = {
+export default {
   encryptPsw,
   comparePsw,
   encryptFileName

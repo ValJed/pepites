@@ -1,6 +1,7 @@
-const { ObjectID } = require('mongodb')
+import mongodb from 'mongodb'
+const { ObjectID } = mongodb
 
-const repository = (db) => {
+export default (db) => {
   const ImageDb = db.collection('images')
 
   return {
@@ -13,5 +14,3 @@ const repository = (db) => {
     deleteOne: id => ImageDb.deleteOne({ _id: ObjectID(id) })
   }
 }
-
-module.exports = repository

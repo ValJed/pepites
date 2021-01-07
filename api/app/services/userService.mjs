@@ -1,6 +1,6 @@
-const userEntity = require('../../domain/User')
+import userEntity from '../../domain/User'
 
-module.exports = ({
+export default ({
   userRepo,
   encrypt,
   jwt,
@@ -149,7 +149,7 @@ module.exports = ({
   }
 
   const sendUserMail = ({ subject, email, message }) => {
-    return sendMail(subject, email, message)
+    // return sendMail(subject, email, message)
   }
 
   return {

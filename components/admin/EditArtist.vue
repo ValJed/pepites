@@ -248,7 +248,6 @@ export default {
       ]
     },
     addEvent (data) {
-      console.log('data ===> ', data)
       this.artist.events.push(data)
     }
   }

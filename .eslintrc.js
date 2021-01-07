@@ -16,6 +16,7 @@ module.exports = {
   // add your custom rules here
   rules: {
     'no-console': 'off',
-    'no-throw-literal': 'off'
+    'no-throw-literal': 'off',
+    'require-await': 'off'
   }
 }

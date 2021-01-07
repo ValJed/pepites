@@ -1,7 +1,8 @@
-const { ObjectID } = require('mongodb')
+import mongodb from 'mongodb'
+const { ObjectID } = mongodb
 
-module.exports = (db) => {
-  const UsersDb = db.collection('users')
+export default (db) => {
+  const UsersDb = db.collection('artists')
 
   return {
     find: () => UsersDb.find().toArray(),

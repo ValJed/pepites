@@ -33,7 +33,10 @@
       </v-list>
     </v-navigation-drawer>
     <v-container>
-      <EditArtist :artist="selectedArtist" :create-artist="createArtist" />
+      <EditArtist
+        :artist="selectedArtist"
+        :create-artist="createArtist"
+      />
     </v-container>
   </div>
 </template>
@@ -70,7 +73,16 @@ export default {
       this.selectedProject = project
     },
 
-    createArtist (artist) {
+    async createArtist (artist) {
+      const { data, status } = await this.$axios.post('/artists', artist)
+      console.log('data ===> ', data)
+
+      if (status === 200) {
+        console.log('=============> 200 <================')
+      }
+    },
+
+    updateArtist (artist) {
       console.log('artist ===> ', artist)
     },
 

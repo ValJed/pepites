@@ -1,4 +1,5 @@
-const { MongoClient } = require('mongodb')
+// const { MongoClient } = require('mongodb')
+import mongodb from 'mongodb'
 
 let client
 let db
@@ -9,7 +10,7 @@ const connect = async ({
   options
 }) => {
   if (!client) {
-    client = new MongoClient(uri, options)
+    client = new mongodb.MongoClient(uri, options)
 
     await client.connect()
 
@@ -26,7 +27,7 @@ const disconnect = async () => {
   await client.close()
 }
 
-module.exports = {
+export default {
   client: () => client,
   db: () => db,
   connect,

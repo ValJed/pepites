@@ -1,4 +1,4 @@
-module.exports = ({ username, email, hash, salt }) => {
+export default ({ username, email, hash, salt }) => {
   const user = {
     username,
     email,

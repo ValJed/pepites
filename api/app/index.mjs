@@ -1,21 +1,22 @@
-const config = require('config')
-const database = require('../infra/mongodb')
-const http = require('../interfaces/index.js')
+
+import config from 'config'
+import database from '../infra/mongodb'
+import http from '../interfaces/index'
 
 // Infra
-const jsonwt = require('../infra/jwt')
-const encrypt = require('../infra/encryption')
-const log = require('../infra/logger')()
-const fileUpload = require('../infra/fileUpload')
+import jsonwt from '../infra/jwt'
+import encrypt from '../infra/encryption'
+import log from '../infra/logger'
+import fileUpload from '../infra/fileUpload'
 
 // Repositories
-const userRepository = require('../infra/mongodb/repositories/userRepo')
-const artistRepository = require('../infra/mongodb/repositories/artistRepo')
-const imageRepository = require('../infra/mongodb/repositories/imageRepo')
+import userRepository from '../infra/mongodb/repositories/userRepo.mjs'
+import artistRepository from '../infra/mongodb/repositories/artistRepo.mjs'
+import imageRepository from '../infra/mongodb/repositories/imageRepo.mjs'
 
 // Services
-const userService = require('./services/userService')
-const artistService = require('./services/artistService')
+import userService from './services/userService.mjs'
+import artistService from './services/artistService.mjs'
 
 const dbConfig = config.get('dbConfig')
 const serverConfig = config.get('serverConfig')
@@ -28,7 +29,7 @@ const jwtConfig = config.get('jwtConfig')
 const startApp = async () => {
   try {
     const { client, db } = await database.connect(dbConfig)
-    console.log('Connected to DB')
+    log.info('Connected to DB')
 
     const userRepo = userRepository(db)
     const artistRepo = artistRepository(db)

@@ -1,6 +1,6 @@
-const express = require('express')
+import express from 'express'
 
-module.exports = ({
+export default ({
   services: {
     artist: artistService,
     user: userService
@@ -12,8 +12,6 @@ module.exports = ({
   const verifyToken = async (req, res, next) => {
     try {
       const { cookie } = req.headers
-
-      console.log('cookie ===> ', require('util').inspect(cookie, { colors: true, depth: 2 }))
 
       const regex = /\pep-token=[^\s]+/
 

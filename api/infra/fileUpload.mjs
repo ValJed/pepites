@@ -1,6 +1,6 @@
-const multer = require('multer')
+import multer from 'multer'
 
-module.exports = () => {
+export default () => {
   // const storage = multer.diskStorage({
   //   destination: (req, file, cb) => {
 
