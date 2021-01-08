@@ -29,12 +29,36 @@
             <v-list-item-title>
               {{ artist.name }}
             </v-list-item-title>
-            <v-list-item-icon>
-              <v-icon
-                @click="deleteArtist(artist._id)"
-                v-text="'mdi-delete-empty'"
-              />
-            </v-list-item-icon>
+
+            <v-dialog
+              v-modal="modalOpened"
+              max-width="350"
+            >
+              <template #activator="{ on, attrs }">
+                <v-list-item-icon>
+                  <v-icon
+                    v-bind="attrs"
+                    v-on="on"
+                    v-text="'mdi-delete-empty'"
+                  />
+                </v-list-item-icon>
+              </template>
+              <v-card class="delete-modal">
+                <v-card-text class="headline">
+                  Are you sure you want to delete this artist ?
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn
+                    color="primary"
+                    text
+                    @click="deleteArtist(artist._id)"
+                  >
+                    Yes
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -89,7 +113,8 @@ export default {
     snackbar: {
       show: false,
       msg: ''
-    }
+    },
+    modalOpened: false
   }),
 
   async mounted () {
@@ -107,10 +132,12 @@ export default {
     async createArtist (artist) {
       try {
         const { data, status } = await this.$axios.post('/artists', artist)
-        console.log('data ===> ', data)
 
         if (status === 200) {
           this.artists.push(data)
+
+          this.snackbar.msg = 'This artist has been successfully created.'
+          this.snackbar.show = true
         }
       } catch ({ response }) {
         this.snackbar.msg = response.data.validation
@@ -127,13 +154,21 @@ export default {
 
     async deleteArtist (artistId) {
       try {
-        console.log('this.$axios ===> ', this.$axios)
-        const { status, data } = await this.$axios.$delete('/artists', { artistId })
+        const { status } = await this.$axios.delete('/artists', { data: { artistId } })
 
-        console.log('status ===> ', status)
-        console.log('data ===> ', data)
+        if (status === 200) {
+          this.artists = this.artists.filter(artist => artist._id !== artistId)
+          if (this.selectedArtist && this.selectedArtist._id === artistId) {
+            this.selectedArtist = null
+          }
+          this.snackbar.msg = 'Artist successfully deleted.'
+          this.snackbar.show = true
+        }
+
+        this.modalOpened = false
       } catch (err) {
-
+        this.snackbar.msg = err.response.data
+        this.snackbar.show = true
       }
     },
 

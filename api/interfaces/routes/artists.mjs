@@ -12,10 +12,33 @@ const validateArtist = celebrate({
 
 export default ({
   services: {
-    artist: artistService
+    artist: artistService,
+    user: userService
   }
 }) => {
   const router = express.Router()
+
+  const verifyToken = async (req, res, next) => {
+    try {
+      const { cookie } = req.headers
+
+      const regex = /\pep-token=[^\s]+/
+
+      const [tokenWithKey] = cookie.match(regex) || []
+
+      if (!tokenWithKey) {
+        return res.status(401).send()
+      }
+
+      const token = tokenWithKey.replace('pep-token=', '').replace(';', '')
+
+      await userService.verify(token)
+
+      next()
+    } catch (err) {
+      return res.status(401).send()
+    }
+  }
 
   router.get('/artists', async (req, res, next) => {
     try {
@@ -27,7 +50,7 @@ export default ({
     }
   })
 
-  router.post('/artists', validateArtist, async (req, res, next) => {
+  router.post('/artists', verifyToken, validateArtist, async (req, res, next) => {
     try {
       const createdArtist = await artistService.addArtist(req.body)
 
@@ -37,12 +60,29 @@ export default ({
     }
   })
 
-  router.put('/artists', validateArtist, async (req, res, next) => {
+  router.put('/artists', verifyToken, validateArtist, async (req, res, next) => {
     try {
       const updatedArtist = await artistService.updateArtist(req.body)
 
       res.status(200).send(updatedArtist)
     } catch (err) {
+      res.status(err.status || 500).send(err.error)
+    }
+  })
+
+  router.delete('/artists', async (req, res, next) => {
+    try {
+      const { artistId } = req.body
+
+      if (!artistId || typeof artistId !== 'string') {
+        res.status(400).send('Artist id must be sent.')
+      }
+
+      await artistService.deleteArtist(artistId)
+
+      res.status(200).send()
+    } catch (err) {
+      console.log('err ===> ', err)
       res.status(err.status || 500).send(err.error)
     }
   })

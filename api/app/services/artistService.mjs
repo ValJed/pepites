@@ -27,7 +27,10 @@ export default ({
     const createdArtist = await artistRepo.create(artist)
 
     if (!createdArtist.result.ok) {
-      throw new Error('Artist couldn\'t have been created')
+      throw {
+        status: 500,
+        error: 'This artist could not be created.'
+      }
     }
 
     console.log('createdArtist ===> ', createdArtist)
@@ -42,8 +45,21 @@ export default ({
     const updatedArtist = await artistRepo.update(artist)
   }
 
+  const deleteArtist = async (id) => {
+    // const { deletedCount } = await artistRepo.deleteOne(id)
+
+    // if (deletedCount !== 1) {
+    throw {
+      status: 500,
+      error: 'This artist could not be deleted.'
+    }
+    // }
+  }
+
   return {
     getArtists,
-    addArtist
+    addArtist,
+    updateArtist,
+    deleteArtist
   }
 }

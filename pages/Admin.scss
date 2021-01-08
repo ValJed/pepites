@@ -10,4 +10,12 @@
       margin: .3rem 0;
     }
   }
+
+  .delete-modal {
+    padding: .5rem;
+
+    &__card {
+      color: #fff
+    }
+  }
 }
