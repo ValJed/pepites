@@ -6,7 +6,7 @@ const cwd = process.cwd()
 export default (encrypt) => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, path.join(cwd, 'public/img'))
+      cb(null, path.join(cwd, 'public/uploads'))
     },
     filename: (req, file, cb) => {
       const fileHash = encrypt.encryptFileName(file.originalname)

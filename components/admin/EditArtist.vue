@@ -19,7 +19,9 @@
       <v-col class="form-header-img">
         <div
           class="img"
-          :style="{ backgroundImage: `url(${artist.img ? `/public/img/${artist.img}` : imagePreview})`}"
+          :style="{ backgroundImage: `url(${artist.img
+            ? `${serverUrl}/public/uploads/${artist.img}`
+            : imagePreview})`}"
         />
         <button type="button">
           <v-icon color="primary" v-text="'mdi-camera'" />
@@ -132,6 +134,17 @@
       </v-col>
     </v-row>
     <v-btn
+      v-if="selectedArtist"
+      color="primary"
+      bottom
+      right
+      fixed
+      @click="updateArtist(artist, imageFile)"
+    >
+      Update
+    </v-btn>
+    <v-btn
+      v-else
       color="primary"
       bottom
       right
@@ -193,7 +206,8 @@ export default {
     videoInput: '',
     releasesInput: '',
     imageFile: null,
-    modalOpened: false
+    modalOpened: false,
+    serverUrl: process.env.serverUrl
   }),
   watch: {
     selectedArtist (newVal, oldVal) {

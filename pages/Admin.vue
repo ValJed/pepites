@@ -141,7 +141,6 @@ export default {
         const { data, status } = await this.$axios.post('/artists', fd)
 
         if (status === 200) {
-          console.log('data ===> ', data)
           this.artists.push(data)
           this.selectedArtist = data
 
