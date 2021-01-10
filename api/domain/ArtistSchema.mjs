@@ -4,9 +4,11 @@ import { urlRegex } from '../../utils/index.mjs'
 const { Joi } = celebrate
 
 export default Joi.object({
+  // _id: Joi.string(),
   name: Joi.string().required(),
   genre: Joi.string().required(),
   content: Joi.string().required(),
+  img: Joi.string().allow(''),
   socialLinks: Joi.object({
     facebook: Joi.string().allow(''),
     instagram: Joi.string().allow(''),

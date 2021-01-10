@@ -19,8 +19,8 @@ export default ({
   const app = express()
   app.disable('x-powered-by')
   app.use(express.json())
-  app.use(express.urlencoded({ extended: false }))
-  app.use('/api', express.static('public'))
+  app.use(express.urlencoded({ extended: true }))
+  app.use('/public', express.static('public'))
   app.use(helmet())
   app.use(cors(corsConfig))
 

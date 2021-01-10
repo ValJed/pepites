@@ -1,19 +1,21 @@
+import path from 'path'
 import multer from 'multer'
 
-export default () => {
-  // const storage = multer.diskStorage({
-  //   destination: (req, file, cb) => {
+const cwd = process.cwd()
 
-  //     cb(null, path)
-  //   },
-  //   filename: (req, file, cb) => {
-  //     const fileHash = encrypt.encryptFileName(file.originalname)
+export default (encrypt) => {
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, path.join(cwd, 'public/img'))
+    },
+    filename: (req, file, cb) => {
+      const fileHash = encrypt.encryptFileName(file.originalname)
 
-  //     cb(null, fileHash)
-  //   }
-  // })
+      cb(null, fileHash)
+    }
+  })
 
-  // return multer({ storage })
+  return multer({ storage })
 
-  return multer()
+  // return multer()
 }

@@ -14,7 +14,8 @@ export default ({
   services: {
     artist: artistService,
     user: userService
-  }
+  },
+  upload
 }) => {
   const router = express.Router()
 
@@ -50,15 +51,39 @@ export default ({
     }
   })
 
-  router.post('/artists', verifyToken, validateArtist, async (req, res, next) => {
-    try {
-      const createdArtist = await artistService.addArtist(req.body)
+  router.post(
+    '/artists',
+    verifyToken,
+    // validateArtist,
+    upload.single('image'),
+    async (req, res, next) => {
+      try {
+        const { artist } = req.body
 
-      res.status(200).send(createdArtist)
-    } catch (err) {
-      res.status(err.status || 500).send(err.error)
-    }
-  })
+        const formattedArtist = JSON.parse(artist)
+
+        const { error } = ArtistSchema.validate(formattedArtist)
+
+        if (error) {
+          const errToSend = error.details.reduce((acc, err) => {
+            return !acc
+              ? err.message
+              : `${acc}, ${err.message}`
+          }, '')
+
+          return res.status(400).send(errToSend)
+        }
+
+        const createdArtist = await artistService.addArtist({
+          artist: formattedArtist,
+          img: req.file && req.file.filename
+        })
+
+        res.status(200).send(createdArtist)
+      } catch (err) {
+        res.status(err.status || 500).send(err.error)
+      }
+    })
 
   router.put('/artists', verifyToken, validateArtist, async (req, res, next) => {
     try {

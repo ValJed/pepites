@@ -40,7 +40,7 @@ const startApp = async () => {
     return http({
       database: client,
       log,
-      upload: fileUpload(),
+      upload: fileUpload(encrypt),
       config: {
         serverConfig,
         corsConfig

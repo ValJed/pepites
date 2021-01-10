@@ -31,7 +31,6 @@
             </v-list-item-title>
 
             <v-dialog
-              v-modal="modalOpened"
               max-width="350"
             >
               <template #activator="{ on, attrs }">
@@ -129,12 +128,22 @@ export default {
       this.selectedArtist = artist
     },
 
-    async createArtist (artist) {
+    async createArtist (artist, imgFile) {
       try {
-        const { data, status } = await this.$axios.post('/artists', artist)
+        const fd = new FormData()
+
+        if (imgFile) {
+          fd.append('image', imgFile, imgFile.name)
+        }
+
+        fd.append('artist', JSON.stringify(artist))
+
+        const { data, status } = await this.$axios.post('/artists', fd)
 
         if (status === 200) {
+          console.log('data ===> ', data)
           this.artists.push(data)
+          this.selectedArtist = data
 
           this.snackbar.msg = 'This artist has been successfully created.'
           this.snackbar.show = true
@@ -172,9 +181,9 @@ export default {
       }
     },
 
-    showCrendentialsModal () {
-      this.$refs.credentialsModal.showModal()
-    },
+    // showCrendentialsModal () {
+    //   this.$refs.credentialsModal.showModal()
+    // },
 
     updateCrendentials (data) {
       console.log('data ===> ', data)

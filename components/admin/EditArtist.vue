@@ -19,7 +19,7 @@
       <v-col class="form-header-img">
         <div
           class="img"
-          :style="{ backgroundImage: `url(${imagePreview})`}"
+          :style="{ backgroundImage: `url(${artist.img ? `/public/img/${artist.img}` : imagePreview})`}"
         />
         <button type="button">
           <v-icon color="primary" v-text="'mdi-camera'" />
@@ -136,7 +136,7 @@
       bottom
       right
       fixed
-      @click="createArtist(artist)"
+      @click="createArtist(artist, imageFile)"
     >
       Create
     </v-btn>
@@ -154,6 +154,7 @@ const emptyArtist = {
   name: '',
   genre: '',
   content: '',
+  img: '',
   socialLinks: {
     facebook: '',
     instagram: '',
@@ -191,6 +192,7 @@ export default {
     imagePreview: null,
     videoInput: '',
     releasesInput: '',
+    imageFile: null,
     modalOpened: false
   }),
   watch: {
@@ -207,6 +209,8 @@ export default {
     fileChange ({ target }) {
       const [file] = target.files
       this.imagePreview = URL.createObjectURL(file)
+
+      this.imageFile = file
     },
     updateContent (content) {
       this.artist.content = content

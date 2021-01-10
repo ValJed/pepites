@@ -23,8 +23,11 @@ export default ({
     return artist
   }
 
-  const addArtist = async (artist) => {
-    const createdArtist = await artistRepo.create(artist)
+  const addArtist = async ({ artist, img }) => {
+    const createdArtist = await artistRepo.create({
+      ...artist,
+      ...img && { img }
+    })
 
     if (!createdArtist.result.ok) {
       throw {
@@ -33,12 +36,7 @@ export default ({
       }
     }
 
-    console.log('createdArtist ===> ', createdArtist)
-
-    return {
-      _id: createdArtist.insertedId,
-      ...artist
-    }
+    return createdArtist.ops[0]
   }
 
   const updateArtist = async (artist) => {
@@ -46,14 +44,14 @@ export default ({
   }
 
   const deleteArtist = async (id) => {
-    // const { deletedCount } = await artistRepo.deleteOne(id)
+    const { deletedCount } = await artistRepo.deleteOne(id)
 
-    // if (deletedCount !== 1) {
-    throw {
-      status: 500,
-      error: 'This artist could not be deleted.'
+    if (deletedCount !== 1) {
+      throw {
+        status: 500,
+        error: 'This artist could not be deleted.'
+      }
     }
-    // }
   }
 
   return {
