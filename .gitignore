@@ -88,3 +88,9 @@ sw.*
 
 # Vim swap files
 *.swp
+
+# Uploads
+public/uploads/*
+
+# exception to the rule
+!public/uploads/.gitkeep
