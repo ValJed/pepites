@@ -11,9 +11,9 @@ export default (db) => {
 
     findUserById: id => ArtistsDb.findOne({ _id: ObjectID(id) }),
 
-    update: (id, newUser) => ArtistsDb.findOneAndUpdate(
+    update: (id, newArtist) => ArtistsDb.findOneAndUpdate(
       { _id: ObjectID(id) },
-      { $set: newUser },
+      { $set: newArtist },
       { returnOriginal: false }
     ),
 

@@ -1,14 +1,22 @@
 // const express = require('express')
 // const Artist = require('../../domain/Artist')
 import express from 'express'
-import celeb from 'celebrate'
+// import celeb from 'celebrate'
 import ArtistSchema from '../../domain/ArtistSchema'
 
-const { celebrate, Segments } = celeb
+// const { celebrate, Segments } = celeb
 
-const validateArtist = celebrate({
-  [Segments.BODY]: ArtistSchema
-})
+// const validateArtist = celebrate({
+//   [Segments.BODY]: ArtistSchema
+// })
+
+const validationErr = (error) => {
+  return error.details.reduce((acc, err) => {
+    return !acc
+      ? err.message
+      : `${acc}, ${err.message}`
+  }, '')
+}
 
 export default ({
   services: {
@@ -62,16 +70,10 @@ export default ({
 
         const formattedArtist = JSON.parse(artist)
 
-        const { error } = ArtistSchema.validate(formattedArtist)
+        const { error } = ArtistSchema().validate(formattedArtist)
 
         if (error) {
-          const errToSend = error.details.reduce((acc, err) => {
-            return !acc
-              ? err.message
-              : `${acc}, ${err.message}`
-          }, '')
-
-          return res.status(400).send(errToSend)
+          return res.status(400).send(validationErr(error))
         }
 
         const createdArtist = await artistService.addArtist({
@@ -85,15 +87,34 @@ export default ({
       }
     })
 
-  router.put('/artists', verifyToken, validateArtist, async (req, res, next) => {
-    try {
-      const updatedArtist = await artistService.updateArtist(req.body)
+  router.put(
+    '/artists',
+    verifyToken,
+    upload.single('image'),
+    async (req, res, next) => {
+      try {
+        const { artist } = req.body
+        const formattedArtist = JSON.parse(artist)
 
-      res.status(200).send(updatedArtist)
-    } catch (err) {
-      res.status(err.status || 500).send(err.error)
-    }
-  })
+        const { error } = ArtistSchema(true).validate(formattedArtist)
+
+        console.log('error ===> ', error)
+
+        if (error) {
+          return res.status(400).send(validationErr(error))
+        }
+
+        const updatedArtist = await artistService.updateArtist({
+          artist: formattedArtist,
+          img: req.file && req.file.filename
+        })
+
+        res.status(200).send(updatedArtist)
+      } catch (err) {
+        console.log('err ===> ', err)
+        res.status(err.status || 500).send(err.error)
+      }
+    })
 
   router.delete('/artists', async (req, res, next) => {
     try {

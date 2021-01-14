@@ -1,13 +1,12 @@
-export default ({ username, email, hash, salt }) => {
-  const user = {
+export default ({ username, email, hash, salt }, update = false) => {
+  return {
     username,
     email,
     password: {
       hash,
       salt
     },
-    CreatedAt: new Date()
+    ...!update && { createdAt: new Date() },
+    updatedAt: new Date()
   }
-
-  return user
 }

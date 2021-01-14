@@ -21,7 +21,7 @@ import artistService from './services/artistService.mjs'
 const dbConfig = config.get('dbConfig')
 const serverConfig = config.get('serverConfig')
 const corsConfig = config.get('corsConfig')
-// const uploadConfig = config.get('uploadConfig')
+const uploadConfig = config.get('uploadConfig')
 // const cloudinaryConfig = config.get('cloudinaryConfig')
 // const mailConfig = config.get('mailConfig')
 const jwtConfig = config.get('jwtConfig')
@@ -56,6 +56,7 @@ const startApp = async () => {
           artistRepo,
           imageRepo,
           encrypt,
+          uploadConfig,
           jwt,
           log
         })

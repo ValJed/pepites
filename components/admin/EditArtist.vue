@@ -19,9 +19,9 @@
       <v-col class="form-header-img">
         <div
           class="img"
-          :style="{ backgroundImage: `url(${artist.img
-            ? `${serverUrl}/public/uploads/${artist.img}`
-            : imagePreview})`}"
+          :style="{
+            backgroundImage: `url(${imgPreview || `${serverUrl}/public/uploads/${artist.img}`})`
+          }"
         />
         <button type="button">
           <v-icon color="primary" v-text="'mdi-camera'" />
@@ -139,7 +139,7 @@
       bottom
       right
       fixed
-      @click="updateArtist(artist, imageFile)"
+      @click="updateArtist(artist, imgFile)"
     >
       Update
     </v-btn>
@@ -149,7 +149,7 @@
       bottom
       right
       fixed
-      @click="createArtist(artist, imageFile)"
+      @click="createArtist(artist, imgFile)"
     >
       Create
     </v-btn>
@@ -196,24 +196,45 @@ export default {
     createArtist: {
       type: Function,
       required: true
+    },
+    updateArtist: {
+      type: Function,
+      required: true
     }
   },
   data: () => ({
     artist: {
       ...emptyArtist
     },
-    imagePreview: null,
+    imgPreview: null,
     videoInput: '',
     releasesInput: '',
-    imageFile: null,
+    imgFile: null,
     modalOpened: false,
     serverUrl: process.env.serverUrl
   }),
+  // computed: {
+  //   getImgPreview () {
+  //     console.log('this.artist.img ===> ', this.artist.img)
+  //     console.log('this.imgFile ===> ', this.imgFile)
+  //     console.log('this.imgPreview ===> ', this.imgPreview)
+
+  //     const pathToImg = `url(${this.serverUrl}/public/uploads/${this.artist.img})`
+
+  //     if (this.imgFile && this.imgPreview) {
+  //       return `url(${this.imgPreview})`
+  //     }
+
+  //     return pathToImg
+  //   }
+  // },
   watch: {
     selectedArtist (newVal, oldVal) {
       this.artist = newVal || {
         ...emptyArtist
       }
+      this.imgFile = null
+      this.imgPreview = null
     }
   },
   methods: {
@@ -222,9 +243,9 @@ export default {
     },
     fileChange ({ target }) {
       const [file] = target.files
-      this.imagePreview = URL.createObjectURL(file)
+      this.imgPreview = URL.createObjectURL(file)
 
-      this.imageFile = file
+      this.imgFile = file
     },
     updateContent (content) {
       this.artist.content = content

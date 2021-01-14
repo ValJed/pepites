@@ -66,6 +66,7 @@
       <EditArtist
         :selected-artist="selectedArtist"
         :create-artist="createArtist"
+        :update-artist="updateArtist"
       />
     </v-container>
     <v-snackbar
@@ -156,8 +157,30 @@ export default {
       }
     },
 
-    async updateArtist (artist) {
-      console.log('artist ===> ', artist)
+    async updateArtist (artist, imgFile) {
+      try {
+        const fd = new FormData()
+
+        if (imgFile) {
+          fd.append('image', imgFile, imgFile.name)
+        }
+
+        fd.append('artist', JSON.stringify(artist))
+
+        const { data, status } = this.$axios.put('/artists', fd)
+
+        if (status === 200) {
+          console.log('data ===> ', data)
+          console.log('status ===> ', status)
+        }
+      } catch ({ response }) {
+        console.log('response ===> ', response)
+        this.snackbar.msg = response.data.validation
+          ? response.data.validation.body.message
+          : response.data
+
+        this.snackbar.show = true
+      }
     },
 
     async deleteArtist (artistId) {
