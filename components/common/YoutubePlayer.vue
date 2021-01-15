@@ -1,6 +1,11 @@
 <template>
   <div class="yt-player">
-    <v-icon class="circle-icon" color="primary" v-text="'mdi-delete-empty'" />
+    <v-icon
+      class="circle-icon"
+      color="primary"
+      @click="deleteVideo(url)"
+      v-text="'mdi-delete-empty'"
+    />
     <iframe
       :src="url"
       frameborder="0"
@@ -16,6 +21,10 @@ export default {
   props: {
     url: {
       type: String,
+      required: true
+    },
+    deleteVideo: {
+      type: Function,
       required: true
     }
   }

@@ -1,8 +1,7 @@
-// const express = require('express')
-// const Artist = require('../../domain/Artist')
 import express from 'express'
 // import celeb from 'celebrate'
 import ArtistSchema from '../../domain/ArtistSchema'
+import Artist from '../../domain/Artist'
 
 // const { celebrate, Segments } = celeb
 
@@ -98,8 +97,6 @@ export default ({
 
         const { error } = ArtistSchema(true).validate(formattedArtist)
 
-        console.log('error ===> ', error)
-
         if (error) {
           return res.status(400).send(validationErr(error))
         }
@@ -111,24 +108,22 @@ export default ({
 
         res.status(200).send(updatedArtist)
       } catch (err) {
-        console.log('err ===> ', err)
         res.status(err.status || 500).send(err.error)
       }
     })
 
   router.delete('/artists', async (req, res, next) => {
     try {
-      const { artistId } = req.body
+      const { artistId, artistImg } = req.body
 
       if (!artistId || typeof artistId !== 'string') {
         res.status(400).send('Artist id must be sent.')
       }
 
-      await artistService.deleteArtist(artistId)
+      await artistService.deleteArtist(artistId, artistImg)
 
       res.status(200).send()
     } catch (err) {
-      console.log('err ===> ', err)
       res.status(err.status || 500).send(err.error)
     }
   })

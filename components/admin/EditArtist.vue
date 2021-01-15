@@ -18,11 +18,13 @@
       </v-col>
       <v-col class="form-header-img">
         <div
+          v-if="imgPreview || artist.img"
           class="img"
           :style="{
             backgroundImage: `url(${imgPreview || `${serverUrl}/public/uploads/${artist.img}`})`
           }"
         />
+        <div v-else class="img" />
         <button type="button">
           <v-icon color="primary" v-text="'mdi-camera'" />
           <input
@@ -80,6 +82,7 @@
             v-for="video in artist.videos.youtube"
             :key="video"
             :url="video"
+            :delete-video="deleteVideo"
           />
         </div>
       </v-col>
@@ -96,8 +99,15 @@
           <div
             v-for="(release, index) in artist.releases"
             :key="index"
-            v-html="release"
-          />
+          >
+            <v-icon
+              class="circle-icon"
+              color="primary"
+              @click="deleteRelease(release)"
+              v-text="'mdi-delete-empty'"
+            />
+            <div v-html="release" />
+          </div>
           <!-- <SoundcloudPlayer />
           <SoundcloudPlayer />
           <SoundcloudPlayer /> -->
@@ -126,8 +136,15 @@
         </v-dialog>
         <ul>
           <li v-for="(event, i) in artist.events" :key="i">
+            <v-icon
+              class="circle-icon"
+              color="primary"
+              @click="deleteEvent(event)"
+              v-text="'mdi-delete-empty'"
+            />
             <h3>{{ event.name }}</h3>
             <p>{{ event.location }}</p>
+            <p>{{ event.date }}</p>
             <a :src="event.link" target="_blank">Lien Facebook</a>
           </li>
         </ul>
@@ -213,21 +230,6 @@ export default {
     modalOpened: false,
     serverUrl: process.env.serverUrl
   }),
-  // computed: {
-  //   getImgPreview () {
-  //     console.log('this.artist.img ===> ', this.artist.img)
-  //     console.log('this.imgFile ===> ', this.imgFile)
-  //     console.log('this.imgPreview ===> ', this.imgPreview)
-
-  //     const pathToImg = `url(${this.serverUrl}/public/uploads/${this.artist.img})`
-
-  //     if (this.imgFile && this.imgPreview) {
-  //       return `url(${this.imgPreview})`
-  //     }
-
-  //     return pathToImg
-  //   }
-  // },
   watch: {
     selectedArtist (newVal, oldVal) {
       this.artist = newVal || {
@@ -235,6 +237,8 @@ export default {
       }
       this.imgFile = null
       this.imgPreview = null
+      this.videoInput = ''
+      this.releasesInput = ''
     }
   },
   methods: {
@@ -260,14 +264,26 @@ export default {
         ...this.artist.videos.youtube
       ]
     },
+    deleteVideo (url) {
+      this.artist.videos.youtube = this.artist.videos.youtube
+        .filter(vid => vid !== url)
+    },
     addRelease ({ target: { value } }) {
       this.artist.releases = [
         value,
         ...this.artist.releases
       ]
     },
-    addEvent (data) {
-      this.artist.events.push(data)
+    deleteRelease (release) {
+      this.artist.releases = this.artist.releases
+        .filter(rel => rel !== release)
+    },
+    addEvent (event) {
+      this.artist.events.push(event)
+    },
+    deleteEvent (event) {
+      this.artist.events = this.artist.events
+        .filter(eve => eve.name !== event.name)
     }
   }
 }

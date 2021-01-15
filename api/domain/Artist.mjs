@@ -1,17 +1,17 @@
 export default ({
-  name,
-  genre,
-  content,
-  img,
-  socialLinks,
-  videos,
-  releases,
-  events,
-  createdAt
-},
-update = false,
-newImg
-) => {
+  artist: {
+    name,
+    genre,
+    content,
+    img,
+    socialLinks,
+    videos,
+    releases,
+    events
+  },
+  update = false,
+  newImg
+}) => {
   return {
     name,
     genre,
@@ -21,7 +21,7 @@ newImg
     videos,
     releases,
     events,
-    ...!update ? { createdAt: new Date() } : { createdAt },
+    ...!update && { createdAt: new Date() },
     updatedAt: new Date()
   }
 }

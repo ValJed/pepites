@@ -16,7 +16,6 @@ export default ({
   const cwd = process.cwd()
 
   const unlinkImg = (name) => {
-    console.log('path ===> ', path.join(cwd, uploadConfig.path, name))
     return new Promise((resolve, reject) => {
       fs.unlink(path.join(cwd, uploadConfig.path, name), (err) => {
         if (err) {
@@ -41,10 +40,9 @@ export default ({
   }
 
   const addArtist = async ({ artist, img }) => {
-    const createdArtist = await artistRepo.create({
-      ...artist,
-      ...img && { img }
-    })
+    const artistEntity = Artist({ artist, newImg: img })
+
+    const createdArtist = await artistRepo.create(artistEntity)
 
     if (!createdArtist.result.ok) {
       throw {
@@ -57,16 +55,13 @@ export default ({
   }
 
   const updateArtist = async ({ artist, img }) => {
-    console.log('artist ===> ', artist)
-    if (artist.img) {
-      console.log('artist.img ===> ', artist.img)
-
+    if (artist.img && img) {
       await unlinkImg(artist.img)
     }
 
-    const newArtist = Artist(artist, true, img)
+    const artistEntity = Artist({ artist, update: true, newImg: img })
 
-    const { value } = await artistRepo.update(artist._id, newArtist)
+    const { value } = await artistRepo.update(artist._id, artistEntity)
 
     if (!value) {
       throw {
@@ -78,7 +73,11 @@ export default ({
     return value
   }
 
-  const deleteArtist = async (id) => {
+  const deleteArtist = async (id, img) => {
+    if (img) {
+      await unlinkImg(img)
+    }
+
     const { deletedCount } = await artistRepo.deleteOne(id)
 
     if (deletedCount !== 1) {

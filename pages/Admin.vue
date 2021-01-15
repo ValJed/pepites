@@ -51,7 +51,7 @@
                   <v-btn
                     color="primary"
                     text
-                    @click="deleteArtist(artist._id)"
+                    @click="deleteArtist(artist._id, artist.img)"
                   >
                     Yes
                   </v-btn>
@@ -139,13 +139,13 @@ export default {
 
         fd.append('artist', JSON.stringify(artist))
 
-        const { data, status } = await this.$axios.post('/artists', fd)
+        const { status, data } = await this.$axios.post('/artists', fd)
 
         if (status === 200) {
           this.artists.push(data)
           this.selectedArtist = data
 
-          this.snackbar.msg = 'This artist has been successfully created.'
+          this.snackbar.msg = 'This artist has been successfully created'
           this.snackbar.show = true
         }
       } catch ({ response }) {
@@ -167,14 +167,20 @@ export default {
 
         fd.append('artist', JSON.stringify(artist))
 
-        const { data, status } = this.$axios.put('/artists', fd)
+        const { status, data } = await this.$axios.put('/artists', fd)
 
         if (status === 200) {
-          console.log('data ===> ', data)
-          console.log('status ===> ', status)
+          this.artists = this.artists.map((art) => {
+            return art._id === artist._id
+              ? data
+              : art
+          })
+          this.selectedArtist = data
+
+          this.snackbar.msg = 'This artist has been successfully updated'
+          this.snackbar.show = true
         }
       } catch ({ response }) {
-        console.log('response ===> ', response)
         this.snackbar.msg = response.data.validation
           ? response.data.validation.body.message
           : response.data
@@ -183,9 +189,9 @@ export default {
       }
     },
 
-    async deleteArtist (artistId) {
+    async deleteArtist (artistId, artistImg) {
       try {
-        const { status } = await this.$axios.delete('/artists', { data: { artistId } })
+        const { status } = await this.$axios.delete('/artists', { data: { artistId, artistImg } })
 
         if (status === 200) {
           this.artists = this.artists.filter(artist => artist._id !== artistId)
