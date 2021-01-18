@@ -214,7 +214,6 @@ export default {
     // },
 
     updateCrendentials (data) {
-      console.log('data ===> ', data)
     }
   }
 }

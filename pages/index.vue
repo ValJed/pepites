@@ -14,49 +14,35 @@
         <ArrowSvg class="arrow" fill="#eee" />
       </div>
     </div>
-    <v-container class="artists-container">
-      <DiamondSvg class="logo" />
-      <ul class="artists">
-        <Artist
-          v-for="artist in artists"
-          :key="artist.name"
-          :artist="artist"
-        />
-      </ul>
+    <v-container>
+      <Artists :artists="artists" />
     </v-container>
   </div>
 </template>
 
 <script>
 import ArrowSvg from '~/assets/svg/down-arrow.svg'
-import DiamondSvg from '~/assets/svg/diamond.svg'
-import Artist from '~/components/Artist'
+import DiamondSvg from '~/assets/svg/pep-diamond.svg'
+import Artists from '~/components/website/Artists'
 
 export default {
   components: {
     ArrowSvg,
     DiamondSvg,
-    Artist
+    Artists
+  },
+  async asyncData (context) {
+    const artists = await context.app.$axios.$get('/artists')
+
+    return {
+      artists
+    }
   },
   data () {
     return {
       diamondsNumber: new Array(50),
       showDiamonds: false,
-      // primaryColor: this.$vuetify.theme.themes.main.primary,
-      artists: [
-        {
-          name: 'toto',
-          content: 'salut les cons'
-        },
-        {
-          name: 'tata',
-          content: 'Ciao belle'
-        },
-        {
-          name: 'tutu',
-          content: 'Death pls, dth !'
-        }
-      ]
+      artists: []
     }
   },
   mounted () {

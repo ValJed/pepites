@@ -22,8 +22,8 @@
   overflow: hidden;
   > svg {
     position: absolute;
-    width: 3rem;
-    height: 3rem;
+    width: 4rem;
+    height: 4rem;
     transform: rotate(180deg);
   }
   > div {
@@ -32,6 +32,9 @@
     align-items: center;
     position: absolute;
     bottom: 10rem;
+    padding: 1.5rem;
+    // background: linear-gradient(150deg, $blue 33%, $primary 50%, $secondary 85%);
+    // background-color: $secondary;
     &:hover {
       cursor: pointer;
       .arrow {
@@ -44,32 +47,14 @@
       color: &primary;
     }
     .arrow {
+      fill: $primary;
       position: relative;
       width: 5rem;
       height: 4rem;
       margin-top: 1rem;
-      // transform: translateY(0);
       bottom: 0;
       transition: bottom .3s linear;
     }
   }
 
-}
-
-.artists-container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  .logo {
-    width: 5rem;
-    height: 5rem;
-    margin: 5rem 0 6rem;
-  }
-
-  .artists {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
 }

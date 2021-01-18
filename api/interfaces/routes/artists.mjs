@@ -58,6 +58,18 @@ export default ({
     }
   })
 
+  router.get('/artists/:id', async (req, res, next) => {
+    try {
+      const { id } = req.params
+
+      const artist = await artistService.getArtists(id)
+
+      res.status(200).send(artist)
+    } catch (err) {
+      res.status(err.status || 500).send(err.error)
+    }
+  })
+
   router.post(
     '/artists',
     verifyToken,

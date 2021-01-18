@@ -1,11 +1,12 @@
 .artist {
-  width: 20rem;
-  height: 20rem;
-  // margin: 0 2rem 2rem;
+  // width: 30rem;
+  // height: 30rem;
+  margin: 0 2rem 2rem;
   &-img {
     width: 100%;
     height: 12rem;
     background-size: cover;
     background-position: center;
+    border-radius: .5rem;
   }
 }

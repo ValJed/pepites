@@ -1,14 +1,14 @@
 <template>
   <li class="artist">
-    <nuxt-link to="/">
+    <nuxt-link :to="`/artists/${artist._id}`">
       <div
         class="artist-img"
-        :style="{ backgroundImage: `url(https://picsum.photos/400/300)`}"
+        :style="{ backgroundImage: `url(${serverUrl}/public/uploads/${artist.img})`}"
       />
       <h3>{{ artist.name }}</h3>
-      <p>{{ artist.content }}</p>
+      <p>{{ artist.genre }}</p>
     </nuxt-link>
-    <iframe
+    <!-- <iframe
       width="100%"
       height="300"
       scrolling="no"
@@ -23,12 +23,11 @@
         target="_blank"
         style="color: #cccccc; text-decoration: none;"
       >NilSeeker</a> · <a href="https://soundcloud.com/nil-seeker/notruthforhumans" title="NoTruthForHumans" target="_blank" style="color: #cccccc; text-decoration: none;">NoTruthForHumans</a>
-    </div>
+    </div> -->
   </li>
 </template>
 
 <script>
-
 export default {
   props: {
     artist: {
@@ -36,9 +35,9 @@ export default {
       required: true
     }
   },
-  mounted () {
-    console.log('this.artist ===> ', this.artist)
-  }
+  data: () => ({
+    serverUrl: process.env.serverUrl
+  })
 }
 </script>
-<style src="./Artist.scss" lang='scss' scoped></style>
+<style src="./ArtistCard.scss" lang='scss' scoped></style>
