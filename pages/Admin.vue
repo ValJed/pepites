@@ -1,6 +1,6 @@
 <template>
   <div class="page-admin">
-    <v-system-bar app color="primary" />
+    <!-- <v-system-bar app color="primary" /> -->
     <v-navigation-drawer
       permanent
       bottom
@@ -62,13 +62,11 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-container>
-      <EditArtist
-        :selected-artist="selectedArtist"
-        :create-artist="createArtist"
-        :update-artist="updateArtist"
-      />
-    </v-container>
+    <EditArtist
+      :selected-artist="selectedArtist"
+      :create-artist="createArtist"
+      :update-artist="updateArtist"
+    />
     <v-snackbar
       v-model="snackbar.show"
       timeout="5000"

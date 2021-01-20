@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <v-row class="form-header">
       <v-col
         classs="form-header-infos"
@@ -79,8 +79,9 @@
         />
         <div class="videos">
           <YoutubePlayer
-            v-for="video in artist.videos.youtube"
-            :key="video"
+            v-for="(video, i) in artist.videos.youtube"
+            :key="i"
+            :video-index="i"
             :url="video"
             :delete-video="deleteVideo"
           />
@@ -103,51 +104,20 @@
             <v-icon
               class="circle-icon"
               color="primary"
-              @click="deleteRelease(release)"
+              @click="deleteRelease(index)"
               v-text="'mdi-delete-empty'"
             />
             <div v-html="release" />
           </div>
-          <!-- <SoundcloudPlayer />
-          <SoundcloudPlayer />
-          <SoundcloudPlayer /> -->
         </div>
       </v-col>
       <v-col class="events">
-        <h3>Events</h3>
-        <v-dialog
-          v-model="modalOpened"
-          max-width="350"
-        >
-          <template #activator="{ on, attrs }">
-            <v-btn
-              color="primary"
-              dark
-              v-bind="attrs"
-              v-on="on"
-            >
-              Create Event
-            </v-btn>
-          </template>
-          <EditEvent
-            :add-event="addEvent"
-            :close-modal="closeModal"
-          />
-        </v-dialog>
-        <ul>
-          <li v-for="(event, i) in artist.events" :key="i">
-            <v-icon
-              class="circle-icon"
-              color="primary"
-              @click="deleteEvent(event)"
-              v-text="'mdi-delete-empty'"
-            />
-            <h3>{{ event.name }}</h3>
-            <p>{{ event.location }}</p>
-            <p>{{ event.date }}</p>
-            <a :src="event.link" target="_blank">Lien Facebook</a>
-          </li>
-        </ul>
+        <EditEvents
+          :events="artist.events"
+          :add-event="addEvent"
+          :delete-event="deleteEvent"
+          :close-modal="closeModal"
+        />
       </v-col>
     </v-row>
     <v-btn
@@ -170,13 +140,14 @@
     >
       Create
     </v-btn>
-  </div>
+  </v-container>
 </template>
 
 <script>
 import Editor from '@/components/admin/Editor'
 import YoutubePlayer from '@/components/common/YoutubePlayer'
-import EditEvent from '@/components/admin/EditEvent'
+import EditEvents from '@/components/admin/EditEvents'
+// import EditEvent from '@/components/admin/EditEvent'
 // import { urlRegex } from '@/utils'
 // import SoundcloudPlayer from '@/components/common/SoundcloudPlayer'
 
@@ -202,7 +173,7 @@ export default {
   components: {
     Editor,
     YoutubePlayer,
-    EditEvent
+    EditEvents
     // SoundcloudPlayer
   },
   props: {
@@ -255,35 +226,53 @@ export default {
       this.artist.content = content
     },
     addVideo ({ target: { value } }) {
-      const val = value.includes('https://youtu.be/')
-        ? value.replace('https://youtu.be/', 'https://youtube.com/embed/')
-        : value
+      const replaceWith = 'https://youtube.com/embed/'
+      const normalUrl = 'https://www.youtube.com/watch?v='
+      const shareUrl = 'https://youtu.be/'
+
+      const val = value.includes(shareUrl)
+        ? value.replace(shareUrl, replaceWith)
+        : value.includes(normalUrl)
+          ? value.replace(normalUrl, replaceWith)
+          : value
 
       this.artist.videos.youtube = [
         val,
         ...this.artist.videos.youtube
       ]
+
+      this.videoInput = ''
     },
-    deleteVideo (url) {
+    deleteVideo (index) {
       this.artist.videos.youtube = this.artist.videos.youtube
-        .filter(vid => vid !== url)
+        .filter((v, i) => i !== index)
     },
     addRelease ({ target: { value } }) {
       this.artist.releases = [
         value,
         ...this.artist.releases
       ]
+      this.releasesInput = ''
     },
-    deleteRelease (release) {
+    deleteRelease (index) {
       this.artist.releases = this.artist.releases
-        .filter(rel => rel !== release)
+        .filter((rel, i) => i !== index)
     },
     addEvent (event) {
+      // if (typeof index === 'number') {
+      //   this.artist.events = this.artist.events
+      //     .map((e, i) => i === index ? event : e)
+      // } else {
       this.artist.events.push(event)
+      // }
     },
-    deleteEvent (event) {
+    deleteEvent (index) {
       this.artist.events = this.artist.events
-        .filter(eve => eve.name !== event.name)
+        .filter((e, i) => i !== index)
+    },
+    updateEvent (event) {
+      this.artists.events = this.artists.events
+        .map(e => e)
     }
   }
 }

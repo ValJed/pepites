@@ -3,7 +3,7 @@
     <v-icon
       class="circle-icon"
       color="primary"
-      @click="deleteVideo(url)"
+      @click="deleteVideo(videoIndex)"
       v-text="'mdi-delete-empty'"
     />
     <iframe
@@ -25,6 +25,10 @@ export default {
     },
     deleteVideo: {
       type: Function,
+      required: true
+    },
+    videoIndex: {
+      type: Number,
       required: true
     }
   }
