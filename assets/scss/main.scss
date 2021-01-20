@@ -2,6 +2,11 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: "Provicali";
+  src: url("~assets/fonts/Provicali.otf") format("opentype");
+ }
+
 .v-application ul {
   padding-left: 0;
   li {
@@ -20,6 +25,13 @@ a {
   border-radius: 100%;
   background-color: #fff;
 }
+
+// Titles
+
+h1, h2, h3, h4 {
+  font-family: 'Provicali';
+}
+
 
 // input[type="text"], input[type="password"] {
 //   background-color: $primary;

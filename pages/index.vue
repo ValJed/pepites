@@ -10,8 +10,11 @@
         @mouseleave="diamondLeave"
       />
       <div @click="scrollDown">
-        <span class="primary--text">Découvrez nos pépites</span>
-        <ArrowSvg class="arrow" fill="#eee" />
+        <h1 class="primary--text">
+          Découvrez nos pépites
+        </h1>
+        <div class="arrow" />
+        <!-- <ArrowSvg class="arrow" fill="#eee" /> -->
       </div>
     </div>
     <v-container>
@@ -21,13 +24,13 @@
 </template>
 
 <script>
-import ArrowSvg from '~/assets/svg/down-arrow.svg'
+// import ArrowSvg from '~/assets/svg/down-arrow.svg'
 import DiamondSvg from '~/assets/svg/pep-diamond.svg'
 import Artists from '~/components/website/Artists'
 
 export default {
   components: {
-    ArrowSvg,
+    // ArrowSvg,
     DiamondSvg,
     Artists
   },
