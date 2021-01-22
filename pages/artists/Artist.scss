@@ -1,9 +1,48 @@
 .page-artist {
+  div[class^="artist-"] {
+    margin-bottom: 1.5rem;
+    h2 {
+      margin-bottom: 1rem;
+    }
+  }
 
-  .artist-img {
-    height: 20rem;
-    background-size: cover;
-    background-position: center;
+  .artist {
 
+    &-img {
+      height: 20rem;
+      background-size: cover;
+      background-position: center;
+    }
+
+    &-header {
+      display: flex;
+      justify-content: space-between;
+
+      h1 {
+        margin-bottom: 2rem;
+      }
+    }
+
+    &-content {
+
+    }
+
+    &-videos {
+      &-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 1rem;
+
+        .yt-player {
+          min-height: 300px;
+        }
+      }
+    }
+
+    &-releases {
+      &-list {
+        display: flex;
+      }
+    }
   }
 }

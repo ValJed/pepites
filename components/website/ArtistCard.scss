@@ -1,12 +1,33 @@
 .artist {
   // width: 30rem;
   // height: 30rem;
-  margin: 0 2rem 2rem;
+  margin: 0 2rem 1rem;
   &-img {
     width: 100%;
     height: 12rem;
     background-size: cover;
     background-position: center;
     border-radius: .5rem;
+  }
+  h3 {
+    margin: .3rem;
+    font-size: 1.4rem;
+  }
+  p {
+    position: relative;
+    font-size: 1rem;
+    padding-left: .3rem;
+    border-left: solid 3px $secondary;
+
+    // &:before {
+    //   content: '';
+    //   display: block;
+    //   position: absolute;
+    //   height: 20px;
+    //   width: 3px;
+    //   background-color: $secondary;
+    //   left: -.3rem;
+    //   bottom: 0;
+    // }
   }
 }

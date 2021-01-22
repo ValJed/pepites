@@ -17,9 +17,7 @@
         <!-- <ArrowSvg class="arrow" fill="#eee" /> -->
       </div>
     </div>
-    <v-container>
-      <Artists :artists="artists" />
-    </v-container>
+    <Artists :artists="artists" />
   </div>
 </template>
 

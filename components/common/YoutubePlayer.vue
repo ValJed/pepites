@@ -1,6 +1,7 @@
 <template>
   <div class="yt-player">
     <v-icon
+      v-if="deleteVideo"
       class="circle-icon"
       color="primary"
       @click="deleteVideo(videoIndex)"
@@ -25,9 +26,18 @@ export default {
     },
     deleteVideo: {
       type: Function,
-      required: true
+      required: false,
+      default: null
     },
     videoIndex: {
+      type: Number,
+      required: true
+    },
+    height: {
+      type: Number,
+      required: true
+    },
+    width: {
       type: Number,
       required: true
     }

@@ -2,6 +2,12 @@
   box-sizing: border-box;
 }
 
+html {
+  // overflow: hidden !important;
+  scrollbar-width: none;
+  // -ms-overflow-style: none;
+}
+
 @font-face {
   font-family: "Provicali";
   src: url("~assets/fonts/Provicali.otf") format("opentype");
@@ -30,6 +36,9 @@ a {
 
 h1, h2, h3, h4 {
   font-family: 'Provicali';
+}
+p , span {
+  font-size: 1.2rem;
 }
 
 
