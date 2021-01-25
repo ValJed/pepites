@@ -1,12 +1,19 @@
 <template>
   <li class="artist">
     <nuxt-link :to="`/artists/${artist._id}`">
-      <div
-        class="artist-img"
-        :style="{ backgroundImage: `url(${serverUrl}/public/uploads/${artist.img})`}"
-      />
-      <h3>{{ artist.name }}</h3>
-      <p>{{ artist.genre }}</p>
+      <h2>{{ artist.name }}</h2>
+      <div class="artist-img-wrapper">
+        <div class="artist-img">
+          <div
+            :style="{
+              backgroundImage: `url(${serverUrl}/public/uploads/${artist.img})`
+            }"
+          />
+        </div>
+      </div>
+      <h4 class="artist-genre">
+        {{ artist.genre }}
+      </h4>
     </nuxt-link>
     <!-- <iframe
       width="100%"

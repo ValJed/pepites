@@ -1,33 +1,80 @@
 .artist {
-  // width: 30rem;
-  // height: 30rem;
   margin: 0 2rem 1rem;
-  &-img {
+  width: 25rem;
+
+  &-img-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    height: 12rem;
-    background-size: cover;
-    background-position: center;
-    border-radius: .5rem;
+    height: 25rem;
+    background: linear-gradient(150deg, $blue 50%,  $secondary 85%);
+    overflow: hidden;
   }
-  h3 {
+
+  &-img {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    height: 90%;
+    border: solid 1px #fff;
+    transition: all .2s ease;
+
+    > div {
+      background-size: cover;
+      background-position: center;
+      width: 90%;
+      height: 90%;
+    }
+
+    &:before, &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      background: url('~assets/img/hand.png');
+      background-size: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      width: 8rem;
+      height: 5rem;
+    }
+
+    &:before {
+      bottom: -4rem;
+      left: -4rem;
+      transform: scaleX(-1);
+    }
+
+    &:after {
+      top: -4rem;
+      right: -4rem;
+      transform: scaleY(-1);
+    }
+
+  }
+
+  &-genre {
+    text-align: right;
+  }
+
+  h2 {
     margin: .3rem;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
+    margin: 0;
   }
   p {
     position: relative;
     font-size: 1rem;
     padding-left: .3rem;
     border-left: solid 3px $secondary;
+  }
 
-    // &:before {
-    //   content: '';
-    //   display: block;
-    //   position: absolute;
-    //   height: 20px;
-    //   width: 3px;
-    //   background-color: $secondary;
-    //   left: -.3rem;
-    //   bottom: 0;
-    // }
+  &:hover {
+    .artist-img {
+      width: 80%;
+      height: 80%;
+    }
   }
 }

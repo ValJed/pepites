@@ -1,0 +1,12 @@
+.social-links {
+  display: flex;
+  justify-content: flex-end;
+  height: 100%;
+
+  li {
+    padding: .3rem;
+    background-color: $secondary;
+    border-radius: 100%;
+    margin-left: .5rem;
+  }
+}
