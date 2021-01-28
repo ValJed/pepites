@@ -1,13 +1,48 @@
 .page-admin {
-  height: 100vh;
+  height: calc(100vh - 65px);
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  overflow: hidden;
 
-  > .v-navigation-drawer {
+  .v-app-bar {
+    .v-toolbar__content {
+      h2 {
+        color: #fff;
+        font-weight: normal;
+      }
+    }
+  }
+
+  > aside {
+    position: relative;
+    background-color: $secondary;
+    transition: all .3s ease-in-out;
+    width: 350px;
+    left: 0;
+    overflow: hidden;
+
     h3 {
       text-align: center;
       margin: .3rem 0;
+      color: $primary;
+    }
+
+    .v-list {
+      background-color: $secondary;
+    }
+
+    .v-list-item {
+      &__title {
+        color: $primary;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+    }
+
+    &.collapsed {
+      left: -350px;
+      width: 0;
     }
   }
 

@@ -1,24 +1,55 @@
 <template>
   <div class="page-admin">
-    <!-- <v-system-bar app color="primary" /> -->
-    <v-navigation-drawer
-      permanent
-      bottom
-      height="auto"
+    <v-app-bar app color="primary">
+      <v-app-bar-nav-icon
+        color="#fff"
+        @click.stop="openedMenu = !openedMenu"
+      />
+      <h2>Admin</h2>
+    </v-app-bar>
+    <aside
+      :class="{ 'collapsed': !openedMenu }"
+      color="secondary"
     >
+      <v-dialog
+        max-width="350"
+      >
+        <template #activator="{ on, attrs }">
+          <v-list-item
+            v-bind="attrs"
+            light
+            v-on="on"
+          >
+            <v-list-item-title
+              @click="selectArtist(null)"
+            >
+              Global infos
+            </v-list-item-title>
+            <v-icon
+              color="primary"
+              v-text="'mdi-cog'"
+            />
+          </v-list-item>
+        </template>
+        <GlobalForm />
+      </v-dialog>
+
       <h3>Artists</h3>
       <v-list
         nav
         dense
       >
         <v-list-item-group
-          v-model="group"
-          active-class="#eee"
+          active-class="secondary"
         >
           <v-list-item>
             <v-list-item-title @click="selectArtist(null)">
               Add new artist
             </v-list-item-title>
+            <v-icon
+              color="primary"
+              v-text="'mdi-account-plus'"
+            />
           </v-list-item>
 
           <v-list-item
@@ -34,11 +65,13 @@
               max-width="350"
             >
               <template #activator="{ on, attrs }">
-                <v-list-item-icon>
+                <v-list-item-icon
+                  v-bind="attrs"
+                  v-on="on"
+                >
                   <v-icon
-                    v-bind="attrs"
-                    v-on="on"
-                    v-text="'mdi-delete-empty'"
+                    color="primary"
+                    v-text="'mdi-trash-can'"
                   />
                 </v-list-item-icon>
               </template>
@@ -61,7 +94,7 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
-    </v-navigation-drawer>
+    </aside>
     <EditArtist
       :selected-artist="selectedArtist"
       :create-artist="createArtist"
@@ -89,11 +122,13 @@
 
 <script>
 import EditArtist from '@/components/admin/EditArtist'
+import GlobalForm from '@/components/admin/GlobalForm'
 // import { apiConfig } from '@/utils/config'
 
 export default {
   components: {
-    EditArtist
+    EditArtist,
+    GlobalForm
   },
   async asyncData (context) {
     const artists = await context.app.$axios.$get('/artists')
@@ -104,6 +139,7 @@ export default {
   },
 
   data: () => ({
+    openedMenu: true,
     group: false,
     sideBar: true,
     artists: [],

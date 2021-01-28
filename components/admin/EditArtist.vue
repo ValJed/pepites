@@ -52,6 +52,31 @@
           :update-content="updateContent"
         />
       </client-only>
+
+      <div class="videos">
+        <h3>Videos</h3>
+        <v-text-field
+          v-model="videoInput"
+          label="Add a video"
+          @keyup.enter="addVideo"
+        />
+        <v-row>
+          <v-col
+            v-for="(video, i) in artist.videos.youtube"
+            :key="i"
+            cols="12"
+            sm="6"
+            xl="4"
+          >
+            <YoutubePlayer
+              :video-index="i"
+              :url="video"
+              :delete-video="deleteVideo"
+            />
+          </v-col>
+        </v-row>
+      </div>
+
       <v-row>
         <v-col cols="3">
           <h3>Social Links</h3>
@@ -70,23 +95,6 @@
             label="Youtube"
             required
           />
-        </v-col>
-        <v-col>
-          <h3>Videos</h3>
-          <v-text-field
-            v-model="videoInput"
-            label="Add a video"
-            @keyup.enter="addVideo"
-          />
-          <div class="videos">
-            <YoutubePlayer
-              v-for="(video, i) in artist.videos.youtube"
-              :key="i"
-              :video-index="i"
-              :url="video"
-              :delete-video="deleteVideo"
-            />
-          </div>
         </v-col>
       </v-row>
       <v-row>

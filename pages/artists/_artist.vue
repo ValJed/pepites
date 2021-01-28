@@ -3,22 +3,17 @@
     <v-row>
       <v-col
         cols="12"
-        sm="4"
+        sm="6"
       >
-        <div class="artist-img">
-          <img
-            :src="`${serverUrl}/public/uploads/${artist.img}`"
-            :alt="`${artist.name} - ${artist.genre}`"
-          >
-        </div>
-        <!-- <div
+        <div
           class="artist-img"
+          :title="`${artist.name} - ${artist.genre}`"
           :style="{ backgroundImage: `url(${serverUrl}/public/uploads/${artist.img})`}"
-        /> -->
+        />
       </v-col>
       <v-col
         cols="12"
-        sm="8"
+        sm="6"
       >
         <div class="artist-header">
           <h1>{{ artist.name }}</h1>
@@ -27,7 +22,10 @@
         <div class="artist-content" v-html="artist.content" />
       </v-col>
     </v-row>
-    <div class="artist-videos">
+    <div
+      v-if="artist.videos.youtube.length"
+      class="artist-videos"
+    >
       <h2>Videos</h2>
       <v-row class="artist-videos-list">
         <v-col
@@ -45,7 +43,10 @@
       </v-row>
     </div>
 
-    <div class="artist-releases">
+    <div
+      v-if="artist.releases.length"
+      class="artist-releases"
+    >
       <h2>Releases</h2>
       <v-row class="artist-releases-list">
         <v-col
@@ -63,7 +64,10 @@
       </v-row>
     </div>
 
-    <div class="artist-events">
+    <div
+      v-if="artist.events.length"
+      class="artist-events"
+    >
       <h2>Events</h2>
       <ul>
         <li
@@ -73,11 +77,12 @@
           <h3>{{ event.name }}</h3>
           <p>{{ event.location }}</p>
           <p>{{ event.date }}</p>
+          <a :href="event.link" target="__blank">
+            See more infos
+          </a>
         </li>
       </ul>
     </div>
-    </v-col>
-    </v-row>
   </v-container>
 </template>
 

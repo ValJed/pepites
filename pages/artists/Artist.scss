@@ -10,12 +10,13 @@
 
     &-img {
       height: 20rem;
-      overflow: hidden;
+      background-position: center;
+      background-size: cover;
 
-      img {
-        min-width: 100%;
-        min-height: 100%;
-      }
+      // img {
+      //   width: 100%;
+      //   min-height: 100%;
+      // }
     }
 
     &-header {

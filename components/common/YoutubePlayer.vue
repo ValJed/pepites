@@ -5,7 +5,7 @@
       class="circle-icon"
       color="primary"
       @click="deleteVideo(videoIndex)"
-      v-text="'mdi-delete-empty'"
+      v-text="'mdi-trash-can'"
     />
     <iframe
       :src="url"

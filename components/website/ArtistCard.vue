@@ -5,6 +5,7 @@
       <div class="artist-img-wrapper">
         <div class="artist-img">
           <div
+            :title="`${artist.name} - ${artist.genre}`"
             :style="{
               backgroundImage: `url(${serverUrl}/public/uploads/${artist.img})`
             }"
