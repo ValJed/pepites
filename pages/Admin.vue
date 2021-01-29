@@ -11,28 +11,19 @@
       :class="{ 'collapsed': !openedMenu }"
       color="secondary"
     >
-      <v-dialog
-        max-width="350"
-      >
-        <template #activator="{ on, attrs }">
-          <v-list-item
-            v-bind="attrs"
-            light
-            v-on="on"
+      <v-list-item-group>
+        <v-list-item>
+          <v-list-item-title
+            @click="showInfos = true"
           >
-            <v-list-item-title
-              @click="selectArtist(null)"
-            >
-              Global infos
-            </v-list-item-title>
-            <v-icon
-              color="primary"
-              v-text="'mdi-cog'"
-            />
-          </v-list-item>
-        </template>
-        <GlobalForm />
-      </v-dialog>
+            Global infos
+          </v-list-item-title>
+          <v-icon
+            color="primary"
+            v-text="'mdi-cog'"
+          />
+        </v-list-item>
+      </v-list-item-group>
 
       <h3>Artists</h3>
       <v-list
@@ -95,11 +86,19 @@
         </v-list-item-group>
       </v-list>
     </aside>
-    <EditArtist
-      :selected-artist="selectedArtist"
-      :create-artist="createArtist"
-      :update-artist="updateArtist"
-    />
+    <div class="page-admin-content">
+      <EditInfos
+        v-if="showInfos"
+        :infos="infos"
+        :create-or-update-infos="createOrUpdateInfos"
+      />
+      <EditArtist
+        v-else
+        :selected-artist="selectedArtist"
+        :create-artist="createArtist"
+        :update-artist="updateArtist"
+      />
+    </div>
     <v-snackbar
       v-model="snackbar.show"
       timeout="5000"
@@ -122,19 +121,22 @@
 
 <script>
 import EditArtist from '@/components/admin/EditArtist'
-import GlobalForm from '@/components/admin/GlobalForm'
+// import GlobalForm from '@/components/admin/GlobalForm'
+import EditInfos from '@/components/admin/EditInfos'
 // import { apiConfig } from '@/utils/config'
 
 export default {
   components: {
     EditArtist,
-    GlobalForm
+    EditInfos
   },
   async asyncData (context) {
     const artists = await context.app.$axios.$get('/artists')
+    const infos = await context.app.$axios.$get('/infos')
 
     return {
-      artists
+      artists,
+      ...infos && { infos }
     }
   },
 
@@ -143,7 +145,9 @@ export default {
     group: false,
     sideBar: true,
     artists: [],
+    infos: null,
     selectedArtist: null,
+    showInfos: false,
     snackbar: {
       show: false,
       msg: ''
@@ -160,6 +164,7 @@ export default {
   methods: {
 
     selectArtist (artist) {
+      this.showInfos = false
       this.selectedArtist = artist
     },
 
@@ -232,13 +237,32 @@ export default {
           if (this.selectedArtist && this.selectedArtist._id === artistId) {
             this.selectedArtist = null
           }
-          this.snackbar.msg = 'Artist successfully deleted.'
+          this.snackbar.msg = 'Artist successfully deleted'
           this.snackbar.show = true
         }
 
         this.modalOpened = false
       } catch (err) {
-        this.snackbar.msg = err.response.data
+        this.snackbar.msg = typeof err.response.data === 'string'
+          ? err.response.data
+          : err.response.statusText
+        this.snackbar.show = true
+      }
+    },
+
+    async createOrUpdateInfos (infos) {
+      try {
+        const { data, status } = await this.$axios.post('/infos', infos)
+
+        if (status === 200) {
+          this.infos = data
+          this.snackbar.msg = 'Infos successfully created'
+          this.snackbar.show = true
+        }
+      } catch (err) {
+        this.snackbar.msg = err.response.data.validation
+          ? err.response.data.validation.body.message
+          : err.response.statusText
         this.snackbar.show = true
       }
     },

@@ -5,14 +5,12 @@
         v-model="form.username"
         label="Username"
         :rules="rules.username"
-        small
         required
       />
       <v-text-field
         v-model="form.psw"
         label="Password"
         :rules="rules.psw"
-        small
         required
       />
 

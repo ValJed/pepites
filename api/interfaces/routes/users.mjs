@@ -1,4 +1,12 @@
 import express from 'express'
+import celeb from 'celebrate'
+import InfoSchema from '../../domain/InfoSchema'
+
+const { celebrate, Segments } = celeb
+
+const validateInfo = celebrate({
+  [Segments.BODY]: InfoSchema
+})
 
 export default ({
   services: {
@@ -8,28 +16,6 @@ export default ({
   log
 }) => {
   const router = new express.Router()
-
-  const verifyToken = async (req, res, next) => {
-    try {
-      const { cookie } = req.headers
-
-      const regex = /\pep-token=[^\s]+/
-
-      const [tokenWithKey] = cookie.match(regex) || []
-
-      if (!tokenWithKey) {
-        return res.status(401).send()
-      }
-
-      const token = tokenWithKey.replace('pep-token=', '').replace(';', '')
-
-      await userService.verify(token)
-
-      next()
-    } catch (err) {
-      return res.status(401).send()
-    }
-  }
 
   // Login user
   router.post('/login', async (req, res) => {
@@ -46,46 +32,55 @@ export default ({
   })
 
   // Login user
-  router.get('/verify', verifyToken, async (req, res, next) => {
-    try {
-      return res.status(200).send()
-    } catch (err) {
-      log.error(err)
-      res.status(500).send(err.message)
-    }
-  })
+  router.get(
+    '/verify',
+    userService.verifyToken,
+    async (req, res, next) => {
+      try {
+        return res.status(200).send()
+      } catch (err) {
+        log.error(err)
+        res.status(err.status || 500).send(err.error || err)
+      }
+    })
 
   // Creating new user
-  router.post('/users', async (req, res, next) => {
-    try {
-      const data = req.body
+  router.post(
+    '/users',
+    userService.verifyToken,
+    async (req, res, next) => {
+      try {
+        const data = req.body
 
-      const response = await userService.create(data)
+        const response = await userService.create(data)
 
-      res.status(201).send(response)
-    } catch (err) {
-      log.error(err)
-      res.status(500).send(err.message)
-    }
-  })
+        res.status(201).send(response)
+      } catch (err) {
+        log.error(err)
+        res.status(err.status || 500).send(err.error || err)
+      }
+    })
 
   // Updating user
-  router.put('/users', async (req, res, next) => {
-    try {
-      const data = req.body
+  router.put(
+    '/users',
+    userService.verifyToken,
+    async (req, res, next) => {
+      try {
+        const data = req.body
 
-      const response = await userService.modify(data)
+        const response = await userService.modify(data)
 
-      if (response.success) {
-        res.status(200).send(response)
-      } else {
-        res.status(400).send(response)
+        if (response.success) {
+          res.status(200).send(response)
+        } else {
+          res.status(400).send(response)
+        }
+      } catch (err) {
+        log.error(err)
+        res.status(err.status || 500).send(err.error || err)
       }
-    } catch (err) {
-      log.error(err)
-      res.status(500).send(err.message)
-    }
-  })
+    })
 
   // Send mail
   router.post('/mail', async (req, res, next) => {
@@ -99,6 +94,38 @@ export default ({
 
     res.status(500).send()
   })
+
+  // Get Infos
+  router.get(
+    '/infos',
+    async (req, res) => {
+      try {
+        const infos = await userService.getInfos()
+
+        res.status(200).send(infos)
+      } catch (err) {
+        res.status(err.status || 500).send(err.error || err)
+      }
+    }
+  )
+
+  // Add global infos
+  router.post(
+    '/infos',
+    userService.verifyToken,
+    validateInfo,
+    async (req, res, next) => {
+      try {
+        const data = req.body
+
+        const result = await userService.addOrModifyInfos(data)
+
+        res.status(200).send(result)
+      } catch (err) {
+        console.log('err ===> ', err)
+        res.status(err.status || 500).send(err.error || err)
+      }
+    })
 
   return router
 }

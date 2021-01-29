@@ -1,7 +1,7 @@
 import express from 'express'
 // import celeb from 'celebrate'
 import ArtistSchema from '../../domain/ArtistSchema'
-import Artist from '../../domain/Artist'
+// import Artist from '../../domain/Artist'
 
 // const { celebrate, Segments } = celeb
 
@@ -26,28 +26,7 @@ export default ({
 }) => {
   const router = express.Router()
 
-  const verifyToken = async (req, res, next) => {
-    try {
-      const { cookie } = req.headers
-
-      const regex = /\pep-token=[^\s]+/
-
-      const [tokenWithKey] = cookie.match(regex) || []
-
-      if (!tokenWithKey) {
-        return res.status(401).send()
-      }
-
-      const token = tokenWithKey.replace('pep-token=', '').replace(';', '')
-
-      await userService.verify(token)
-
-      next()
-    } catch (err) {
-      return res.status(401).send()
-    }
-  }
-
+  // Public routes
   router.get('/artists', async (req, res, next) => {
     try {
       const artists = await artistService.getArtists()
@@ -70,9 +49,10 @@ export default ({
     }
   })
 
+  // Private routes
   router.post(
     '/artists',
-    verifyToken,
+    userService.verifyToken,
     // validateArtist,
     upload.single('image'),
     async (req, res, next) => {
@@ -100,7 +80,7 @@ export default ({
 
   router.put(
     '/artists',
-    verifyToken,
+    userService.verifyToken,
     upload.single('image'),
     async (req, res, next) => {
       try {
@@ -124,21 +104,24 @@ export default ({
       }
     })
 
-  router.delete('/artists', async (req, res, next) => {
-    try {
-      const { artistId, artistImg } = req.body
+  router.delete(
+    '/artists',
+    userService.verifyToken,
+    async (req, res, next) => {
+      try {
+        const { artistId, artistImg } = req.body
 
-      if (!artistId || typeof artistId !== 'string') {
-        res.status(400).send('Artist id must be sent.')
+        if (!artistId || typeof artistId !== 'string') {
+          res.status(400).send('Artist id must be sent.')
+        }
+
+        await artistService.deleteArtist(artistId, artistImg)
+
+        res.status(200).send()
+      } catch (err) {
+        res.status(err.status || 500).send(err.error || err)
       }
-
-      await artistService.deleteArtist(artistId, artistImg)
-
-      res.status(200).send()
-    } catch (err) {
-      res.status(err.status || 500).send(err.error)
-    }
-  })
+    })
 
   return router
 }

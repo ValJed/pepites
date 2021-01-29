@@ -1,39 +1,38 @@
 <template>
-  <div class="edit-artist">
-    <v-container>
-      <v-row class="form-header">
-        <v-col
-          classs="form-header-infos"
-          align-self="baseline"
-        >
-          <v-text-field
-            v-model="artist.name"
-            label="Name"
-            required
-          />
-          <v-text-field
-            v-model="artist.genre"
-            label="Genre"
-            required
-          />
-        </v-col>
-        <v-col class="form-header-img">
-          <div
-            v-if="imgPreview || artist.img"
-            class="img"
-            :style="{
-              backgroundImage: `url(${imgPreview || `${serverUrl}/public/uploads/${artist.img}`})`
-            }"
-          />
-          <div v-else class="img" />
-          <button type="button">
-            <v-icon color="primary" v-text="'mdi-camera'" />
-            <input
-              type="file"
-              accept="image/png, image/jpeg"
-              @change="fileChange"
-            >
-          </button>
+  <v-container>
+    <v-row class="form-header">
+      <v-col
+        classs="form-header-infos"
+        align-self="baseline"
+      >
+        <v-text-field
+          v-model="artist.name"
+          label="Name"
+          required
+        />
+        <v-text-field
+          v-model="artist.genre"
+          label="Genre"
+          required
+        />
+      </v-col>
+      <v-col class="form-header-img">
+        <div
+          v-if="imgPreview || artist.img"
+          class="img"
+          :style="{
+            backgroundImage: `url(${imgPreview || `${serverUrl}/public/uploads/${artist.img}`})`
+          }"
+        />
+        <div v-else class="img" />
+        <button type="button">
+          <v-icon color="primary" v-text="'mdi-camera'" />
+          <input
+            type="file"
+            accept="image/png, image/jpeg"
+            @change="fileChange"
+          >
+        </button>
         <!-- <v-file-input
             hide-input
             color="primary"
@@ -43,114 +42,113 @@
             @change="fileChange"
           >
           </v-file-input> -->
+      </v-col>
+    </v-row>
+    <client-only>
+      <Editor
+        :id="artist._id"
+        :content="artist.content"
+        :update-content="updateContent"
+      />
+    </client-only>
+
+    <div class="videos">
+      <h3>Videos</h3>
+      <v-text-field
+        v-model="videoInput"
+        label="Add a video"
+        @keyup.enter="addVideo"
+      />
+      <v-row>
+        <v-col
+          v-for="(video, i) in artist.videos.youtube"
+          :key="i"
+          cols="12"
+          sm="6"
+          xl="4"
+        >
+          <YoutubePlayer
+            :video-index="i"
+            :url="video"
+            :delete-video="deleteVideo"
+          />
         </v-col>
       </v-row>
-      <client-only>
-        <Editor
-          :id="artist._id"
-          :content="artist.content"
-          :update-content="updateContent"
-        />
-      </client-only>
+    </div>
 
-      <div class="videos">
-        <h3>Videos</h3>
+    <v-row>
+      <v-col cols="3">
+        <h3>Social Links</h3>
         <v-text-field
-          v-model="videoInput"
-          label="Add a video"
-          @keyup.enter="addVideo"
+          v-model="artist.socialLinks.facebook"
+          label="Facebook"
+          required
         />
-        <v-row>
-          <v-col
-            v-for="(video, i) in artist.videos.youtube"
-            :key="i"
-            cols="12"
-            sm="6"
-            xl="4"
+        <v-text-field
+          v-model="artist.socialLinks.instagram"
+          label="Instagram"
+          required
+        />
+        <v-text-field
+          v-model="artist.socialLinks.youtube"
+          label="Youtube"
+          required
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <h3>Releases</h3>
+        <v-text-field
+          v-model="releasesInput"
+          label="Add a release"
+          @keyup.enter="addRelease"
+        />
+        <div class="releases">
+          <div
+            v-for="(release, index) in artist.releases"
+            :key="index"
           >
-            <YoutubePlayer
-              :video-index="i"
-              :url="video"
-              :delete-video="deleteVideo"
+            <v-icon
+              class="circle-icon"
+              color="primary"
+              @click="deleteRelease(index)"
+              v-text="'mdi-delete-empty'"
             />
-          </v-col>
-        </v-row>
-      </div>
-
-      <v-row>
-        <v-col cols="3">
-          <h3>Social Links</h3>
-          <v-text-field
-            v-model="artist.socialLinks.facebook"
-            label="Facebook"
-            required
-          />
-          <v-text-field
-            v-model="artist.socialLinks.instagram"
-            label="Instagram"
-            required
-          />
-          <v-text-field
-            v-model="artist.socialLinks.youtube"
-            label="Youtube"
-            required
-          />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <h3>Releases</h3>
-          <v-text-field
-            v-model="releasesInput"
-            label="Add a release"
-            @keyup.enter="addRelease"
-          />
-          <div class="releases">
-            <div
-              v-for="(release, index) in artist.releases"
-              :key="index"
-            >
-              <v-icon
-                class="circle-icon"
-                color="primary"
-                @click="deleteRelease(index)"
-                v-text="'mdi-delete-empty'"
-              />
-              <div v-html="release" />
-            </div>
+            <div v-html="release" />
           </div>
-        </v-col>
-        <v-col class="events">
-          <EditEvents
-            :events="artist.events"
-            :add-event="addEvent"
-            :delete-event="deleteEvent"
-            :close-modal="closeModal"
-          />
-        </v-col>
-      </v-row>
-      <v-btn
-        v-if="selectedArtist"
-        color="primary"
-        bottom
-        right
-        fixed
-        @click="updateArtist(artist, imgFile)"
-      >
-        Update
-      </v-btn>
-      <v-btn
-        v-else
-        color="primary"
-        bottom
-        right
-        fixed
-        @click="createArtist(artist, imgFile)"
-      >
-        Create
-      </v-btn>
-    </v-container>
-  </div>
+        </div>
+      </v-col>
+      <v-col class="events">
+        <EditEvents
+          :events="artist.events"
+          :add-event="addEvent"
+          :delete-event="deleteEvent"
+          :close-modal="closeModal"
+        />
+      </v-col>
+    </v-row>
+    <v-btn
+      v-if="selectedArtist"
+      color="primary"
+      bottom
+      right
+      fixed
+      @click="updateArtist(artist, imgFile)"
+    >
+      Update
+    </v-btn>
+    <v-btn
+      v-else
+      color="primary"
+      bottom
+      right
+      fixed
+      @click="createArtist(artist, imgFile)"
+    >
+      Create
+    </v-btn>
+  </v-container>
 </template>
 
 <script>

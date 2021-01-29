@@ -46,6 +46,11 @@
     }
   }
 
+  &-content {
+    width: 100%;
+    overflow: auto;
+  }
+
   .delete-modal {
     padding: .5rem;
 

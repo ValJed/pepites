@@ -2,6 +2,7 @@ import userEntity from '../../domain/User'
 
 export default ({
   userRepo,
+  infosRepo,
   encrypt,
   jwt,
   log
@@ -152,6 +153,45 @@ export default ({
     // return sendMail(subject, email, message)
   }
 
+  const getInfos = () => {
+    return infosRepo.find()
+  }
+
+  const addOrModifyInfos = async (infos) => {
+    const { value, ok } = await infosRepo.createOrUpdate(infos)
+
+    if (ok !== 1 || !value) {
+      throw {
+        status: 500,
+        error: 'Error when creating infos document'
+      }
+    }
+
+    return value
+  }
+
+  const verifyToken = async (req, res, next) => {
+    try {
+      const { cookie } = req.headers
+
+      const regex = /\pep-token=[^\s]+/
+
+      const [tokenWithKey] = cookie.match(regex) || []
+
+      if (!tokenWithKey) {
+        return res.status(401).send()
+      }
+
+      const token = tokenWithKey.replace('pep-token=', '').replace(';', '')
+
+      await verify(token)
+
+      next()
+    } catch (err) {
+      return res.status(401).send()
+    }
+  }
+
   return {
     findAll,
     findByEmail,
@@ -159,6 +199,9 @@ export default ({
     modify,
     login,
     verify,
-    sendUserMail
+    sendUserMail,
+    getInfos,
+    addOrModifyInfos,
+    verifyToken
   }
 }

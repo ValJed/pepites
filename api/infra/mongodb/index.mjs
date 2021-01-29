@@ -1,4 +1,3 @@
-// const { MongoClient } = require('mongodb')
 import mongodb from 'mongodb'
 
 let client

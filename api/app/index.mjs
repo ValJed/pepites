@@ -13,6 +13,7 @@ import fileUpload from '../infra/fileUpload'
 import userRepository from '../infra/mongodb/repositories/userRepo.mjs'
 import artistRepository from '../infra/mongodb/repositories/artistRepo.mjs'
 import imageRepository from '../infra/mongodb/repositories/imageRepo.mjs'
+import infosRepository from '../infra/mongodb/repositories/infosRepo.mjs'
 
 // Services
 import userService from './services/userService.mjs'
@@ -34,6 +35,7 @@ const startApp = async () => {
     const userRepo = userRepository(db)
     const artistRepo = artistRepository(db)
     const imageRepo = imageRepository(db)
+    const infosRepo = infosRepository(db)
 
     const jwt = jsonwt(jwtConfig)
 
@@ -48,6 +50,7 @@ const startApp = async () => {
       services: {
         user: userService({
           userRepo,
+          infosRepo,
           encrypt,
           jwt,
           log
