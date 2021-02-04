@@ -1,5 +1,5 @@
 <template>
-  <div class="page-home">
+  <div ref="homePage" class="page-home">
     <div ref="diamonds" class="diamonds-container">
       <DiamondSvg
         v-for="(svg, i) in diamondsNumber"
@@ -9,7 +9,7 @@
         @mouseover="diamondHover"
         @mouseleave="diamondLeave"
       />
-      <div @click="scrollDown">
+      <div @click="showArtists = !showArtists">
         <h1 class="primary--text">
           Découvrez nos pépites
         </h1>
@@ -17,7 +17,9 @@
         <!-- <ArrowSvg class="arrow" fill="#eee" /> -->
       </div>
     </div>
-    <Artists :artists="artists" />
+    <div class="artists-container" :class="{ 'showed': showArtists }">
+      <Artists :artists="artists" />
+    </div>
   </div>
 </template>
 
@@ -43,49 +45,68 @@ export default {
     return {
       diamondsNumber: new Array(50),
       showDiamonds: false,
-      artists: []
+      artists: [],
+      showArtists: false
     }
   },
   mounted () {
-    const screenWidth = window.innerWidth
-    const screenHeight = window.innerHeight
-    const diamondsContainer = this.$refs.diamonds
-    const diamonds = diamondsContainer.querySelectorAll('svg.diamond')
+    this.initDiamonds()
+    // this.listenScroll()
 
-    diamonds.forEach((diamond) => {
-      const left = Math.floor(Math.random() * (Math.floor(screenWidth) - 30))
-      const bottom = Math.floor(Math.random() * ((screenHeight * 2) - screenHeight + 1) + screenHeight)
-      const rotation = Math.floor(Math.random() * 360)
+    window.addEventListener('scroll', (e) => {
+      if (!this.showArtists) {
+        this.showArtists = true
 
-      diamond.style.left = `${left}px`
-      diamond.style.bottom = `${bottom}px`
-      diamond.style.transform = `rotate(${rotation}deg)`
+        window.removeEventListener('scroll')
+      }
     })
-
-    this.showDiamonds = true
-
-    setInterval(() => {
-      diamonds.forEach((diamond) => {
-        if (!diamond.classList.contains('hovered')) {
-          diamond.style.bottom = `${parseInt(diamond.style.bottom, 10) - 3}px`
-
-          if (parseInt(diamond.style.bottom) < -40) {
-            diamond.style.bottom = `${screenHeight}px`
-            diamond.style.left = `${Math.floor(Math.random() * Math.floor(screenWidth))}px`
-          }
-        }
-      })
-    }, 20)
   },
   methods: {
-    scrollDown () {
-      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
-    },
+    // listenScroll () {
+    //   window.addEventListener('scroll', (e) => {
+    //     console.log('e ===> ', e)
+    //     // if (this.showArtists) {
+
+    //     // }
+    //   // window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
+    //   })
+    // },
     diamondHover ({ target }) {
       target.classList.add('hovered')
     },
     diamondLeave ({ target }) {
       target.classList.remove('hovered')
+    },
+    initDiamonds () {
+      const screenWidth = window.innerWidth
+      const screenHeight = window.innerHeight
+      const diamondsContainer = this.$refs.diamonds
+      const diamonds = diamondsContainer.querySelectorAll('svg.diamond')
+
+      diamonds.forEach((diamond) => {
+        const left = Math.floor(Math.random() * (Math.floor(screenWidth) - 30))
+        const bottom = Math.floor(Math.random() * ((screenHeight * 2) - screenHeight + 1) + screenHeight)
+        const rotation = Math.floor(Math.random() * 360)
+
+        diamond.style.left = `${left}px`
+        diamond.style.bottom = `${bottom}px`
+        diamond.style.transform = `rotate(${rotation}deg)`
+      })
+
+      this.showDiamonds = true
+
+      setInterval(() => {
+        diamonds.forEach((diamond) => {
+          if (!diamond.classList.contains('hovered')) {
+            diamond.style.bottom = `${parseInt(diamond.style.bottom, 10) - 3}px`
+
+            if (parseInt(diamond.style.bottom) < -40) {
+              diamond.style.bottom = `${screenHeight}px`
+              diamond.style.left = `${Math.floor(Math.random() * Math.floor(screenWidth))}px`
+            }
+          }
+        })
+      }, 20)
     }
   }
 }

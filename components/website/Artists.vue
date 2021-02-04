@@ -1,5 +1,5 @@
 <template>
-  <v-container class="artists-container">
+  <v-container>
     <div class="logo">
       <LogoSvg />
     </div>
