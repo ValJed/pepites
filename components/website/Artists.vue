@@ -1,8 +1,5 @@
 <template>
   <v-container>
-    <div class="logo">
-      <LogoSvg />
-    </div>
     <ul class="artists">
       <ArtistCard
         v-for="artist in artists"
@@ -15,11 +12,9 @@
 
 <script>
 import ArtistCard from './ArtistCard'
-import LogoSvg from '~/assets/svg/pep-logo2.svg'
 
 export default {
   components: {
-    LogoSvg,
     ArtistCard
   },
   props: {

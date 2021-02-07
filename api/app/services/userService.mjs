@@ -153,7 +153,7 @@ export default ({
     // return sendMail(subject, email, message)
   }
 
-  const getInfos = () => {
+  const getInfos = async () => {
     return infosRepo.find()
   }
 

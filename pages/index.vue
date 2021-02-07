@@ -1,5 +1,6 @@
 <template>
   <div ref="homePage" class="page-home">
+    <Header />
     <div ref="diamonds" class="diamonds-container">
       <DiamondSvg
         v-for="(svg, i) in diamondsNumber"
@@ -25,12 +26,14 @@
 
 <script>
 // import ArrowSvg from '~/assets/svg/down-arrow.svg'
+import Header from '~/components/common/Header'
 import DiamondSvg from '~/assets/svg/pep-diamond.svg'
 import Artists from '~/components/website/Artists'
 
 export default {
   components: {
     // ArrowSvg,
+    Header,
     DiamondSvg,
     Artists
   },
@@ -53,13 +56,13 @@ export default {
     this.initDiamonds()
     // this.listenScroll()
 
-    window.addEventListener('scroll', (e) => {
-      if (!this.showArtists) {
-        this.showArtists = true
+    // window.addEventListener('scroll', (e) => {
+    //   if (!this.showArtists) {
+    //     this.showArtists = true
 
-        window.removeEventListener('scroll')
-      }
-    })
+    //     window.removeEventListener('scroll')
+    //   }
+    // })
   },
   methods: {
     // listenScroll () {

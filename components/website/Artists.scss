@@ -1,20 +1,4 @@
 .container {
-  .logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 260px;
-    height: 260px;
-    margin: 2rem auto 3rem;
-    padding: .5rem;
-    background: linear-gradient(150deg, $blue 50%, $secondary 85%);
-    border-radius: 100%;
-
-    > svg {
-      height: 80%;
-    }
-  }
-
   .artists {
     display: flex;
     justify-content: space-evenly;

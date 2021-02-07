@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <!-- <Header /> -->
     <v-main>
       <nuxt />
     </v-main>
@@ -7,7 +8,12 @@
 </template>
 
 <script>
+// import Header from '~/components/common/Header'
+
 export default {
+  components: {
+    // Header
+  },
   data () {
     return {
       clipped: false,
