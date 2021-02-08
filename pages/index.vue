@@ -1,6 +1,5 @@
 <template>
   <div ref="homePage" class="page-home">
-    <Header />
     <div ref="diamonds" class="diamonds-container">
       <DiamondSvg
         v-for="(svg, i) in diamondsNumber"
@@ -19,6 +18,7 @@
       </div>
     </div>
     <div class="artists-container" :class="{ 'showed': showArtists }">
+      <Header :show="showHeader" />
       <Artists :artists="artists" />
     </div>
   </div>
@@ -49,31 +49,39 @@ export default {
       diamondsNumber: new Array(50),
       showDiamonds: false,
       artists: [],
-      showArtists: false
+      showArtists: false,
+      showHeader: false,
+      intervalListener: null
     }
   },
   mounted () {
     this.initDiamonds()
-    // this.listenScroll()
+    this.listenScroll()
 
     // window.addEventListener('scroll', (e) => {
-    //   if (!this.showArtists) {
-    //     this.showArtists = true
-
-    //     window.removeEventListener('scroll')
+    //   console.log('window.offsetHeight ===> ', window.innerHeight)
+    //   if ((window.scrollY > window.innerHeight) && !this.showHeader) {
+    //     this.showHeader = true
+    //   } else if ((window.scrollY < window.innerHeight) && this.showHeader) {
+    //     this.showHeader = false
     //   }
     // })
   },
   methods: {
-    // listenScroll () {
-    //   window.addEventListener('scroll', (e) => {
-    //     console.log('e ===> ', e)
-    //     // if (this.showArtists) {
+    listenScroll () {
+      const listener = (e) => {
+        console.log('=============> HERE <================')
+        if (!this.showArtists) {
+          this.showArtists = true
+          window.removeEventListener('scroll', listener)
+          console.log('this.intervalListener ===> ', this.intervalListener)
+          clearInterval(this.intervalListener)
+        }
+      // window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
+      }
 
-    //     // }
-    //   // window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
-    //   })
-    // },
+      window.addEventListener('scroll', listener)
+    },
     diamondHover ({ target }) {
       target.classList.add('hovered')
     },
@@ -98,7 +106,7 @@ export default {
 
       this.showDiamonds = true
 
-      setInterval(() => {
+      this.intervalListener = setInterval(() => {
         diamonds.forEach((diamond) => {
           if (!diamond.classList.contains('hovered')) {
             diamond.style.bottom = `${parseInt(diamond.style.bottom, 10) - 3}px`

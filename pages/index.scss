@@ -12,6 +12,8 @@
 
 .page-home {
   position: relative;
+  height: 101vh;
+  overflow: hidden;
 
   .diamonds-container {
     height: 100vh;
@@ -88,18 +90,18 @@
 
   }
 
-  // .artists-container {
-  //   position: absolute;
-  //   left: 0;
-  //   top: 100%;
-  //   height: 100vh;
-  //   overflow: auto;
-  //   transition: all .5s ease-in-out;
-  //   background-color: #fff;
-  //   width: 100%;
+  .artists-container {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    height: 100vh;
+    overflow: auto;
+    transition: all .5s ease-in-out;
+    background-color: #fff;
+    width: 100%;
 
-  //   &.showed {
-  //     top: 0;
-  //   }
-  // }
+    &.showed {
+      top: 0;
+    }
+  }
 }

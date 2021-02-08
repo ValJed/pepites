@@ -1,13 +1,13 @@
 <template>
-  <header>
+  <header :class="{'showed': show}">
     <!-- <v-container> -->
     <div class="logo">
       <LogoSvg />
     </div>
     <div class="links">
-      <ul>
+      <!-- <ul>
         <li>Contact</li>
-      </ul>
+      </ul> -->
       <ul class="social-links">
         <li>
           <a :href="facebookLink" target="_blank">
@@ -46,6 +46,12 @@ export default {
   components: {
     LogoSvg
   },
+  props: {
+    show: {
+      type: Boolean,
+      required: true
+    }
+  },
   data: () => ({
     facebookLink: '',
     instagramLink: '',
@@ -58,12 +64,14 @@ export default {
 
     const { data: { socialLinks } } = await this.$axios.get('/infos')
 
-    console.log('socialLinks ===> ', socialLinks)
     if (socialLinks) {
       this.facebookLink = socialLinks.facebook
       this.instagramLink = socialLinks.instagram
       this.youtubeLink = socialLinks.youtube
     }
+  },
+  mounted () {
+    console.log('this.showed ===> ', this.show)
   },
   fetchOnServer: false
 }
