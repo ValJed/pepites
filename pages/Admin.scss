@@ -11,6 +11,20 @@
         color: #fff;
         font-weight: normal;
       }
+
+      .links {
+        ul {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          width: 130px;
+          a, li {
+            font-size: 1.2rem;
+            color: #fff;
+            cursor: pointer;
+          }
+        }
+      }
     }
   }
 

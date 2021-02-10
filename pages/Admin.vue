@@ -6,6 +6,17 @@
         @click.stop="openedMenu = !openedMenu"
       />
       <h2>Admin</h2>
+      <v-spacer />
+      <div class="links">
+        <ul>
+          <li>
+            <nuxt-link to="/">
+              Home
+            </nuxt-link>
+          </li>
+          <li>Logout</li>
+        </ul>
+      </div>
     </v-app-bar>
     <aside
       :class="{ 'collapsed': !openedMenu }"

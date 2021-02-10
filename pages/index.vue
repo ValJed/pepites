@@ -9,7 +9,7 @@
         @mouseover="diamondHover"
         @mouseleave="diamondLeave"
       />
-      <div @click="showArtists = !showArtists">
+      <div v-if="showArrow" @click="showArtistsBlock">
         <h1 class="primary--text">
           Découvrez nos pépites
         </h1>
@@ -37,6 +37,12 @@ export default {
     DiamondSvg,
     Artists
   },
+  transition () {
+    return {
+      name: 'page',
+      duration: 300
+    }
+  },
   async asyncData (context) {
     const artists = await context.app.$axios.$get('/artists')
 
@@ -51,36 +57,37 @@ export default {
       artists: [],
       showArtists: false,
       showHeader: false,
+      showArrow: true,
       intervalListener: null
     }
   },
   mounted () {
+    if (window.showArtists) {
+      this.showArtists = true
+      this.showArrow = false
+    }
     this.initDiamonds()
     this.listenScroll()
-
-    // window.addEventListener('scroll', (e) => {
-    //   console.log('window.offsetHeight ===> ', window.innerHeight)
-    //   if ((window.scrollY > window.innerHeight) && !this.showHeader) {
-    //     this.showHeader = true
-    //   } else if ((window.scrollY < window.innerHeight) && this.showHeader) {
-    //     this.showHeader = false
-    //   }
-    // })
   },
   methods: {
     listenScroll () {
       const listener = (e) => {
-        console.log('=============> HERE <================')
-        if (!this.showArtists) {
+        if (!this.showArtists && !window.showArtists) {
           this.showArtists = true
+          window.showArtists = true
           window.removeEventListener('scroll', listener)
-          console.log('this.intervalListener ===> ', this.intervalListener)
           clearInterval(this.intervalListener)
         }
-      // window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
       }
 
       window.addEventListener('scroll', listener)
+    },
+    showArtistsBlock () {
+      this.showArtists = true
+
+      setTimeout(() => {
+        this.showArrow = false
+      }, 300)
     },
     diamondHover ({ target }) {
       target.classList.add('hovered')

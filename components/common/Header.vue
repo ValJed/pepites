@@ -1,9 +1,9 @@
 <template>
   <header :class="{'showed': show}">
     <!-- <v-container> -->
-    <div class="logo">
+    <nuxt-link class="logo" :to="'/'">
       <LogoSvg />
-    </div>
+    </nuxt-link>
     <div class="links">
       <!-- <ul>
         <li>Contact</li>

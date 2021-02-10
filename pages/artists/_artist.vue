@@ -1,5 +1,6 @@
 <template>
   <v-container class="page-artist">
+    <Header />
     <v-row>
       <v-col
         cols="12"
@@ -87,11 +88,13 @@
 </template>
 
 <script>
+import Header from '@/components/common/Header'
 import YoutubePlayer from '@/components/common/YoutubePlayer'
 import SocialLinks from '@/components/website/SocialLinks'
 
 export default {
   components: {
+    Header,
     YoutubePlayer,
     SocialLinks
   },
