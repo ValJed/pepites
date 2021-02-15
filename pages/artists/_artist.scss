@@ -7,16 +7,10 @@
   }
 
   .artist {
-
     &-img {
       height: 20rem;
       background-position: center;
       background-size: cover;
-
-      // img {
-      //   width: 100%;
-      //   min-height: 100%;
-      // }
     }
 
     &-header {
@@ -24,6 +18,41 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 2rem;
+    }
+
+    &-contacts {
+      position: relative;
+      padding-bottom: 2rem;
+      margin-bottom: 0;
+
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 40%;
+        height: 3px;
+        bottom: 0;
+        background-color: #000;
+      }
+
+      .social-links {
+        margin-top: 1rem;
+      }
+
+      h2 {
+        text-transform: uppercase;
+        letter-spacing: .1rem;
+        font-size: 1.5rem;
+      }
+
+      h3 {
+        font-size: 1.3rem;
+      }
+
+      p {
+        margin-bottom: .3rem;
+        font-size: 1.05rem;
+      }
     }
 
     &-content {

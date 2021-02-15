@@ -3,7 +3,7 @@
     <li v-if="links.instagram">
       <a :href="links.instagram" target="_blank">
         <v-icon
-          color="primary"
+          :color="color"
           v-text="'mdi-instagram'"
         />
       </a>
@@ -11,7 +11,7 @@
     <li>
       <a :href="links.facebook" target="_blank">
         <v-icon
-          color="primary"
+          :color="color"
           v-text="'mdi-facebook'"
         />
       </a>
@@ -19,7 +19,7 @@
     <li>
       <a :href="links.youtube" target="_blank">
         <v-icon
-          color="primary"
+          :color="color"
           v-text="'mdi-youtube'"
         />
       </a>
@@ -34,10 +34,12 @@ export default {
     links: {
       type: Object,
       required: true
+    },
+    color: {
+      type: String,
+      required: false,
+      default: null
     }
-  },
-  mounted () {
-    console.log('this.links ===> ', this.links)
   }
 }
 </script>

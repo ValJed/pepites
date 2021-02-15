@@ -9,7 +9,10 @@
         @mouseover="diamondHover"
         @mouseleave="diamondLeave"
       />
-      <div v-if="showArrow" @click="showArtistsBlock">
+      <div
+        :class="{hidden: showArtists}"
+        @click="showArtistsBlock"
+      >
         <h1 class="primary--text">
           Découvrez nos pépites
         </h1>
@@ -18,21 +21,19 @@
       </div>
     </div>
     <div class="artists-container" :class="{ 'showed': showArtists }">
-      <Header :show="showHeader" />
+      <Header :show="showHeader" :social-links="infos.socialLinks" is-home />
       <Artists :artists="artists" />
     </div>
   </div>
 </template>
 
 <script>
-// import ArrowSvg from '~/assets/svg/down-arrow.svg'
 import Header from '~/components/common/Header'
 import DiamondSvg from '~/assets/svg/pep-diamond.svg'
 import Artists from '~/components/website/Artists'
 
 export default {
   components: {
-    // ArrowSvg,
     Header,
     DiamondSvg,
     Artists
@@ -45,20 +46,19 @@ export default {
   },
   async asyncData (context) {
     const artists = await context.app.$axios.$get('/artists')
+    const infos = await context.app.$axios.$get('/infos')
 
-    return {
-      artists
-    }
+    return { artists, infos }
   },
   data () {
     return {
+      artists: [],
+      infos: {},
       diamondsNumber: new Array(50),
       showDiamonds: false,
-      artists: [],
       showArtists: false,
       showHeader: false,
-      showArrow: true,
-      intervalListener: null
+      showArrow: true
     }
   },
   mounted () {
@@ -71,12 +71,10 @@ export default {
   },
   methods: {
     listenScroll () {
-      const listener = (e) => {
+      const listener = () => {
         if (!this.showArtists && !window.showArtists) {
-          this.showArtists = true
-          window.showArtists = true
+          this.showArtistsBlock()
           window.removeEventListener('scroll', listener)
-          clearInterval(this.intervalListener)
         }
       }
 
@@ -84,6 +82,7 @@ export default {
     },
     showArtistsBlock () {
       this.showArtists = true
+      window.showArtists = true
 
       setTimeout(() => {
         this.showArrow = false
@@ -113,7 +112,7 @@ export default {
 
       this.showDiamonds = true
 
-      this.intervalListener = setInterval(() => {
+      setInterval(() => {
         diamonds.forEach((diamond) => {
           if (!diamond.classList.contains('hovered')) {
             diamond.style.bottom = `${parseInt(diamond.style.bottom, 10) - 3}px`

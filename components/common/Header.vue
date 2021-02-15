@@ -1,34 +1,32 @@
 <template>
-  <header :class="{'showed': show}">
+  <header :class="{'home-page': isHome}">
     <!-- <v-container> -->
     <nuxt-link class="logo" :to="'/'">
-      <LogoSvg />
+      <FullLogoSvg v-if="isHome" />
+      <LogoSvg v-else />
     </nuxt-link>
     <div class="links">
       <!-- <ul>
         <li>Contact</li>
       </ul> -->
       <ul class="social-links">
-        <li>
-          <a :href="facebookLink" target="_blank">
+        <li v-if="socialLinks.facebook">
+          <a :href="socialLinks.facebook" target="_blank">
             <v-icon
-              color="primary"
               v-text="'mdi-facebook'"
             />
           </a>
         </li>
-        <li>
-          <a :href="instagramLink" target="_blank">
+        <li v-if="socialLinks.instagram">
+          <a :href="socialLinks.instagram" target="_blank">
             <v-icon
-              color="primary"
               v-text="'mdi-instagram'"
             />
           </a>
         </li>
-        <li>
-          <a :href="youtubeLink" target="_blank">
+        <li v-if="socialLinks.youtube">
+          <a :href="socialLinks.youtube" target="_blank">
             <v-icon
-              color="primary"
               v-text="'mdi-youtube'"
             />
           </a>
@@ -40,15 +38,26 @@
 </template>
 
 <script>
-import LogoSvg from '~/assets/svg/pep-logo2.svg'
+import FullLogoSvg from '~/assets/svg/pep-logo2.svg'
+import LogoSvg from '~/assets/svg/pep-logo1.svg'
 
 export default {
   components: {
+    FullLogoSvg,
     LogoSvg
   },
   props: {
-    show: {
+    // show: {
+    //   type: Boolean,
+    //   required: true
+    // },
+    isHome: {
       type: Boolean,
+      required: false,
+      default: false
+    },
+    socialLinks: {
+      type: Object,
       required: true
     }
   },
@@ -56,24 +65,7 @@ export default {
     facebookLink: '',
     instagramLink: '',
     youtubeLink: ''
-  }),
-  async fetch () {
-    if (this.facebookLink || this.instagramLink || this.youtubeLink) {
-      return
-    }
-
-    const { data: { socialLinks } } = await this.$axios.get('/infos')
-
-    if (socialLinks) {
-      this.facebookLink = socialLinks.facebook
-      this.instagramLink = socialLinks.instagram
-      this.youtubeLink = socialLinks.youtube
-    }
-  },
-  mounted () {
-    console.log('this.showed ===> ', this.show)
-  },
-  fetchOnServer: false
+  })
 }
 </script>
 <style src="./Header.scss" scoped lang='scss'></style>
