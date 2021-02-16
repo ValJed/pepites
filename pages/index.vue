@@ -1,5 +1,5 @@
 <template>
-  <div ref="homePage" class="page-home">
+  <div ref="homePage" class="page-home" :class="{'show-artists': showArtists}">
     <div ref="diamonds" class="diamonds-container">
       <DiamondSvg
         v-for="(svg, i) in diamondsNumber"
@@ -17,7 +17,6 @@
           Découvrez nos pépites
         </h1>
         <div class="arrow" />
-        <!-- <ArrowSvg class="arrow" fill="#eee" /> -->
       </div>
     </div>
     <div class="artists-container" :class="{ 'showed': showArtists }">

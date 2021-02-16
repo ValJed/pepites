@@ -15,8 +15,12 @@
   height: 101vh;
   overflow: hidden;
 
-  .diamonds-container {
+  &.show-artists {
     height: 100vh;
+  }
+
+  .diamonds-container {
+    height: 100%;
     position: relative;
     display: flex;
     justify-content: center;
