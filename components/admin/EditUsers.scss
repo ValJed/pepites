@@ -1,0 +1,19 @@
+.edit-users {
+  .user {
+    padding: 1rem;
+    width: 15rem;
+    background-color: $primary;
+    color: #fff;
+  }
+
+  h2 {
+    margin: 1.5rem 0;
+  }
+
+  .v-form {
+    .v-btn {
+      float: right;
+      margin-top: .5rem;
+    }
+  }
+}

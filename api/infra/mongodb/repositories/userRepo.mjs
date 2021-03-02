@@ -5,7 +5,7 @@ export default (db) => {
   const UsersDb = db.collection('users')
 
   return {
-    find: () => UsersDb.find().toArray(),
+    findAll: () => UsersDb.find().toArray(),
 
     findByUsername: username => UsersDb.findOne({ username }),
 

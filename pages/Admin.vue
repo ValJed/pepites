@@ -25,9 +25,28 @@
       <v-list-item-group>
         <v-list-item>
           <v-list-item-title
-            @click="showInfos = true"
+            @click="
+              showUsers = true
+              showInfos = true
+            "
           >
             Global infos
+          </v-list-item-title>
+          <v-icon
+            color="primary"
+            v-text="'mdi-cog'"
+          />
+        </v-list-item>
+      </v-list-item-group>
+      <v-list-item-group>
+        <v-list-item>
+          <v-list-item-title
+            @click="
+              showInfos = false
+              showUsers = true
+            "
+          >
+            Manage Users
           </v-list-item-title>
           <v-icon
             color="primary"
@@ -103,6 +122,11 @@
         :infos="infos"
         :create-or-update-infos="createOrUpdateInfos"
       />
+      <EditUsers
+        v-else-if="showUsers"
+        :admin="admin"
+        :users="users"
+      />
       <EditArtist
         v-else
         :selected-artist="selectedArtist"
@@ -134,20 +158,32 @@
 import EditArtist from '@/components/admin/EditArtist'
 // import GlobalForm from '@/components/admin/GlobalForm'
 import EditInfos from '@/components/admin/EditInfos'
+import EditUsers from '@/components/admin/EditUsers'
 // import { apiConfig } from '@/utils/config'
 
 export default {
   components: {
     EditArtist,
-    EditInfos
+    EditInfos,
+    EditUsers
   },
   async asyncData (context) {
     const artists = await context.app.$axios.$get('/artists')
     const infos = await context.app.$axios.$get('/infos')
+    const allUsers = await context.app.$axios.$get('/users')
 
+    const { users, admin } = allUsers.reduce((acc, user) => {
+      return {
+        ...user.admin
+          ? { admin: user }
+          : { users: [...acc.users || [], user] }
+      }
+    }, {})
     return {
       artists,
-      ...infos && { infos }
+      admin,
+      ...infos && { infos },
+      ...users && { users }
     }
   },
 
@@ -156,9 +192,11 @@ export default {
     group: false,
     sideBar: true,
     artists: [],
+    users: [],
     infos: null,
     selectedArtist: null,
     showInfos: false,
+    showUsers: false,
     snackbar: {
       show: false,
       msg: ''
@@ -176,6 +214,7 @@ export default {
 
     selectArtist (artist) {
       this.showInfos = false
+      this.showUsers = false
       this.selectedArtist = artist
     },
 

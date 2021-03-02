@@ -7,19 +7,15 @@ export default ({
   jwt,
   log
 }) => {
-  const findAll = async () => {
-    const users = await userRepo.find()
+  const getAll = async () => {
+    const users = await userRepo.findAll()
 
-    if (users && users.length) {
-      return {
-        success: true,
-        users
-      }
-    }
-    return {
-      success: false,
-      errors: ['No users found']
-    }
+    return users.map(({ _id, username, email, admin }) => ({
+      _id,
+      username,
+      email,
+      admin
+    }))
   }
 
   const findByEmail = async (email) => {
@@ -193,7 +189,7 @@ export default ({
   }
 
   return {
-    findAll,
+    getAll,
     findByEmail,
     create,
     modify,

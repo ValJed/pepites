@@ -44,6 +44,20 @@ export default ({
       }
     })
 
+  // Getting user
+  router.get(
+    '/users',
+    userService.verifyToken,
+    async (req, res, next) => {
+      try {
+        const users = await userService.getAll()
+        res.status(201).send(users)
+      } catch (err) {
+        log.error(err)
+        res.status(err.status || 500).send(err.error || err)
+      }
+    })
+
   // Creating new user
   router.post(
     '/users',

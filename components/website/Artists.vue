@@ -1,13 +1,13 @@
 <template>
-  <v-container>
-    <ul class="artists">
+  <div class="artists">
+    <ul class="artists-list">
       <ArtistCard
         v-for="artist in artists"
         :key="artist.name"
         :artist="artist"
       />
     </ul>
-  </v-container>
+  </div>
 </template>
 
 <script>
