@@ -32,25 +32,45 @@ export default ({
     }
   }
 
-  const create = async ({ username, email, password }) => {
+  const create = async ({ username, email, psw, repeatPsw }) => {
     const existingUser = await userRepo.findByUsername(username)
 
-    if (existingUser) {
+    if (existingUser || psw !== repeatPsw) {
+      const error = existingUser
+        ? 'This username already match an account'
+        : 'Passwords must be the same'
+
       throw {
         status: 400,
-        error: 'This email already match an account'
+        error
       }
     }
 
-    const { hash, salt } = await encrypt.encryptPsw(password)
+    const { hash, salt } = await encrypt.encryptPsw(psw)
 
     const newUser = userEntity({ username, email, hash, salt })
 
-    const res = await userRepo.create(newUser)
+    const { insertedCount, insertedId } = await userRepo.create(newUser)
 
-    if (res) {
-      return {
-        success: !!res.result.ok
+    if (insertedCount !== 1) {
+      throw {
+        status: 500,
+        error: 'Error during user creation'
+      }
+    }
+    return {
+      _id: insertedId,
+      ...newUser
+    }
+  }
+
+  const remove = async (id) => {
+    const { deletedCount } = await userRepo.deleteOne(id)
+
+    if (deletedCount !== 1) {
+      throw {
+        status: 500,
+        error: 'Could not delete this user'
       }
     }
   }
@@ -192,6 +212,7 @@ export default ({
     getAll,
     findByEmail,
     create,
+    remove,
     modify,
     login,
     verify,

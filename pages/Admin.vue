@@ -50,7 +50,7 @@
           </v-list-item-title>
           <v-icon
             color="primary"
-            v-text="'mdi-cog'"
+            v-text="'mdi-account'"
           />
         </v-list-item>
       </v-list-item-group>
@@ -126,6 +126,8 @@
         v-else-if="showUsers"
         :admin="admin"
         :users="users"
+        :create-user="createUser"
+        :delete-user="deleteUser"
       />
       <EditArtist
         v-else
@@ -174,11 +176,13 @@ export default {
 
     const { users, admin } = allUsers.reduce((acc, user) => {
       return {
+        ...acc,
         ...user.admin
           ? { admin: user }
           : { users: [...acc.users || [], user] }
       }
     }, {})
+
     return {
       artists,
       admin,
@@ -317,9 +321,35 @@ export default {
       }
     },
 
-    // showCrendentialsModal () {
-    //   this.$refs.credentialsModal.showModal()
-    // },
+    async createUser (user) {
+      try {
+        const { data, status } = await this.$axios.post('/users', user)
+
+        if (status === 201) {
+          this.users.push(data)
+          this.snackbar.msg = 'User successfully created'
+          this.snackbar.show = true
+        }
+      } catch (err) {
+        this.snackbar.msg = 'Error when creating user'
+        this.snackbar.show = true
+      }
+    },
+
+    async deleteUser (userId) {
+      try {
+        const { status } = await this.$axios.delete('/users', { data: { userId } })
+
+        if (status === 200) {
+          this.users = this.users.filter(user => user._id !== userId)
+          this.snackbar.msg = 'User successfully deleted'
+          this.snackbar.show = true
+        }
+      } catch (err) {
+        this.snackbar.msg = 'Error when deleting user'
+        this.snackbar.show = true
+      }
+    },
 
     updateCrendentials (data) {
     }

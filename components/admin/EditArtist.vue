@@ -113,7 +113,7 @@
               class="circle-icon"
               color="primary"
               @click="deleteRelease(index)"
-              v-text="'mdi-delete-empty'"
+              v-text="'mdi-trash-can'"
             />
             <div v-html="release" />
           </div>

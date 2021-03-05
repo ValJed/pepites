@@ -19,7 +19,7 @@ export default (db) => {
 
     create: user => UsersDb.insertOne(user),
 
-    deleteOne: id => UsersDb.deleteOne({ _id: id }),
+    deleteOne: id => UsersDb.deleteOne({ _id: ObjectID(id) }),
 
     deleteUserProject: (userId, projectId) => UsersDb.updateOne(
       { _id: ObjectID(userId) },

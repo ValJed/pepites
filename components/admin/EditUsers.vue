@@ -13,23 +13,33 @@
           sm="4"
           xl="4"
         >
-          <v-form @submit.prevent="createUser()">
+          <v-form
+            ref="form"
+            @submit.prevent="submitForm(userForm)"
+          >
             <v-text-field
-              v-model="nameInput"
+              v-model="userForm.username"
               label="Name"
-              dense
+              :rules="rules.username"
               required
             />
             <v-text-field
-              v-model="emailInput"
+              v-model="userForm.email"
               label="Email"
-              dense
               required
             />
             <v-text-field
-              v-model="passwordInput"
+              v-model="userForm.psw"
               label="Password"
-              dense
+              type="password"
+              :rules="[...rules.psw, pswSame]"
+              required
+            />
+            <v-text-field
+              v-model="userForm.repeatPsw"
+              label="Repeat Password"
+              type="password"
+              :rules="[...rules.psw, pswSame]"
               required
             />
             <v-btn
@@ -42,11 +52,16 @@
           </v-form>
         </v-col>
         <v-col cols="8">
-          <ul>
+          <ul class="users-list">
             <li
               v-for="user in users"
               :key="user._id"
             >
+              <v-icon
+                color="#fff"
+                @click="deleteUser(user._id)"
+                v-text="'mdi-trash-can'"
+              />
               <p>{{ user.username }}</p>
               <p>{{ user.email }}</p>
             </li>
@@ -68,13 +83,57 @@ export default {
     users: {
       type: Array,
       required: true
+    },
+    createUser: {
+      type: Function,
+      required: true
+    },
+    deleteUser: {
+      type: Function,
+      required: true
     }
   },
   data: () => ({
-    nameInput: '',
-    emailInput: '',
-    pswInput: ''
-  })
+    userForm: {
+      username: '',
+      email: '',
+      psw: '',
+      repeatPsw: ''
+    },
+    rules: {
+      username: [
+        val => !!val || 'Name is required'
+      ],
+
+      psw: [
+        val => !!val || 'Password must be filled',
+        val => val.length > 6 || 'Password must be at least 6 chars'
+      ]
+
+    }
+  }),
+  watch: {
+    userForm: {
+      handler ({ psw, repeatPsw }) {
+        if (psw && repeatPsw) {
+          this.$refs.form.validate()
+        }
+      },
+      deep: true
+    }
+  },
+  methods: {
+    pswSame () {
+      return (this.userForm.psw === this.userForm.repeatPsw) || 'Password must be the same'
+    },
+    submitForm (form) {
+      const isValid = this.$refs.form.validate()
+
+      if (isValid) {
+        this.createUser(form)
+      }
+    }
+  }
 }
 </script>
 <style src="./EditUsers.scss" scoped lang='scss'></style>

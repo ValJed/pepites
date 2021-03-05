@@ -1,11 +1,16 @@
 import express from 'express'
 import celeb from 'celebrate'
 import InfoSchema from '../../domain/InfoSchema'
+import UserSchema from '../../domain/UserSchema'
 
 const { celebrate, Segments } = celeb
 
 const validateInfo = celebrate({
   [Segments.BODY]: InfoSchema
+})
+
+const validateUser = celebrate({
+  [Segments.BODY]: UserSchema
 })
 
 export default ({
@@ -62,18 +67,40 @@ export default ({
   router.post(
     '/users',
     userService.verifyToken,
+    validateUser,
     async (req, res, next) => {
       try {
         const data = req.body
 
-        const response = await userService.create(data)
+        const user = await userService.create(data)
 
-        res.status(201).send(response)
+        res.status(201).send(user)
       } catch (err) {
         log.error(err)
         res.status(err.status || 500).send(err.error || err)
       }
     })
+
+  // Deleting user
+  router.delete(
+    '/users',
+    userService.verifyToken,
+    async (req, res, next) => {
+      try {
+        const { userId } = req.body
+
+        if (!userId) {
+          return res.status(400).send('You must provide an ID')
+        }
+
+        await userService.remove(userId)
+
+        res.status(200).send()
+      } catch (err) {
+        res.status(err.status || 500).send(err.error || err)
+      }
+    }
+  )
 
   // Updating user
   router.put(
@@ -136,7 +163,6 @@ export default ({
 
         res.status(200).send(result)
       } catch (err) {
-        console.log('err ===> ', err)
         res.status(err.status || 500).send(err.error || err)
       }
     })

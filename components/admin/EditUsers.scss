@@ -4,6 +4,8 @@
     width: 15rem;
     background-color: $primary;
     color: #fff;
+    border-radius: .3rem;
+    border: solid 2px $secondary;
   }
 
   h2 {
@@ -14,6 +16,33 @@
     .v-btn {
       float: right;
       margin-top: .5rem;
+    }
+  }
+
+  .users-list {
+    display: flex;
+    justify-content: center;
+
+    li {
+      position: relative;
+      padding: 1rem;
+      width: 15rem;
+      background-color: $primary;
+      color: #fff;
+      margin: 0 .7rem;
+      border-radius: .3rem;
+      border: solid 2px $secondary;
+
+      button {
+        position: absolute;
+        top: .3rem;
+        right: .3rem;
+      }
+
+      p {
+        font-size: 1rem;
+        margin-bottom: .3rem;
+      }
     }
   }
 }

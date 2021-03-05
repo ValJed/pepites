@@ -32,7 +32,7 @@
           class="circle-icon"
           color="primary"
           @click.stop="deleteEvent(i)"
-          v-text="'mdi-delete-empty'"
+          v-text="'mdi-trash-can'"
         />
         <h3>{{ event.name }}</h3>
         <p>{{ event.location }}</p>
