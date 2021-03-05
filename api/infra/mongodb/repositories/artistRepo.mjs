@@ -5,7 +5,7 @@ export default (db) => {
   const ArtistsDb = db.collection('artists')
 
   return {
-    findAll: () => ArtistsDb.find().toArray(),
+    findAllSortified: () => ArtistsDb.find().sort({ rank: 1 }).toArray(),
 
     findByUsername: username => ArtistsDb.findOne({ username }),
 

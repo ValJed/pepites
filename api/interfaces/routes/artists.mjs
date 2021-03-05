@@ -107,7 +107,7 @@ export default ({
   router.delete(
     '/artists',
     userService.verifyToken,
-    async (req, res, next) => {
+    async (req, res) => {
       try {
         const { artistId, artistImg } = req.body
 
@@ -122,6 +122,21 @@ export default ({
         res.status(err.status || 500).send(err.error || err)
       }
     })
+
+  // Update artists ranks
+  router.put(
+    '/artists/ranks',
+    userService.verifyToken,
+    async (req, res) => {
+      try {
+        const { artists } = req.body
+        console.log('artists ===> ', artists)
+        res.status(200).send()
+      } catch (err) {
+        res.status(err.status || 500).send(err.error || err)
+      }
+    }
+  )
 
   return router
 }

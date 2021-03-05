@@ -8,6 +8,7 @@ export default (update = false) => {
     ...update && { _id: Joi.string().required() },
     name: Joi.string().required(),
     genre: Joi.string().required(),
+    rank: Joi.number().required(),
     content: Joi.string().required(),
     img: Joi.string().allow(''),
     socialLinks: Joi.object({

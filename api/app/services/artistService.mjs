@@ -27,7 +27,7 @@ export default ({
   }
 
   const getArtists = async (id) => {
-    const artists = await artistRepo.findAll()
+    const artists = await artistRepo.findAllSortified()
 
     if (!id) {
       return artists

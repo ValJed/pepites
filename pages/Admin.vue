@@ -73,46 +73,57 @@
             />
           </v-list-item>
 
-          <v-list-item
+          <div
             v-for="artist in artists"
             :key="artist.id"
-            @click="selectArtist(artist)"
+            class="drop-zone"
+            @drop="onDrop($event, artist._id, artist.rank)"
+            @dragenter.prevent="dragEnter"
+            @dragleave.prevent="dragLeave"
+            @dragover.prevent
           >
-            <v-list-item-title>
-              {{ artist.name }}
-            </v-list-item-title>
-
-            <v-dialog
-              max-width="350"
+            <v-list-item
+              draggable
+              @dragstart="dragStart($event, artist)"
+              @dragend="dragEnd"
+              @click="selectArtist(artist)"
             >
-              <template #activator="{ on, attrs }">
-                <v-list-item-icon
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon
-                    color="primary"
-                    v-text="'mdi-trash-can'"
-                  />
-                </v-list-item-icon>
-              </template>
-              <v-card class="delete-modal">
-                <v-card-text class="headline">
-                  Are you sure you want to delete this artist ?
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer />
-                  <v-btn
-                    color="primary"
-                    text
-                    @click="deleteArtist(artist._id, artist.img)"
+              <v-list-item-title>
+                {{ artist.name }}
+              </v-list-item-title>
+
+              <v-dialog
+                max-width="350"
+              >
+                <template #activator="{ on, attrs }">
+                  <v-list-item-icon
+                    v-bind="attrs"
+                    v-on="on"
                   >
-                    Yes
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-list-item>
+                    <v-icon
+                      color="primary"
+                      v-text="'mdi-trash-can'"
+                    />
+                  </v-list-item-icon>
+                </template>
+                <v-card class="delete-modal">
+                  <v-card-text class="headline">
+                    Are you sure you want to delete this artist ?
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer />
+                    <v-btn
+                      color="primary"
+                      text
+                      @click="deleteArtist(artist._id, artist.img)"
+                    >
+                      Yes
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-list-item>
+          </div>
         </v-list-item-group>
       </v-list>
     </aside>
@@ -158,10 +169,8 @@
 
 <script>
 import EditArtist from '@/components/admin/EditArtist'
-// import GlobalForm from '@/components/admin/GlobalForm'
 import EditInfos from '@/components/admin/EditInfos'
 import EditUsers from '@/components/admin/EditUsers'
-// import { apiConfig } from '@/utils/config'
 
 export default {
   components: {
@@ -230,7 +239,7 @@ export default {
           fd.append('image', imgFile, imgFile.name)
         }
 
-        fd.append('artist', JSON.stringify(artist))
+        fd.append('artist', JSON.stringify({ ...artist, rank: this.artists.length + 1 }))
 
         const { status, data } = await this.$axios.post('/artists', fd)
 
@@ -351,7 +360,118 @@ export default {
       }
     },
 
-    updateCrendentials (data) {
+    dragStart ({ target, dataTransfer }, item) {
+      dataTransfer.dropEffect = 'move'
+      dataTransfer.effectAllowed = 'move'
+      dataTransfer.setData('movedId', item._id)
+      setTimeout(() => {
+        target.classList.add('invisible')
+      }, 0)
+    },
+
+    async updateArtistsRanks (artists) {
+      const { status, data } = await this.$axios.put('/artists/ranks', { artists })
+
+      console.log('status ===> ', status)
+      console.log('data ===> ', data)
+    },
+
+    dragEnd ({ target }) {
+      target.classList.remove('invisible')
+    },
+
+    dragEnter ({ target, currentTarget }) {
+      if (target.classList && target.classList.contains('drop-zone')) {
+        currentTarget.classList.add('hovered')
+      }
+    },
+
+    dragLeave ({ target, currentTarget }) {
+      if (target.classList && target.classList.contains('drop-zone')) {
+        currentTarget.classList.remove('hovered')
+      }
+    },
+
+    onDrop ({ dataTransfer }, dropId, dropRank) {
+      const movedId = dataTransfer.getData('movedId')
+
+      // const movedItem = this.artists
+      const movedArtist = this.artists.find(art => art._id === movedId)
+      const moveDown = movedArtist.rank < dropRank
+
+      if (dropRank === movedArtist.rank + 1) {
+        return
+      }
+
+      const [artists, toUpdate] = this.artists.reduce(([acc, toUpdate], artist) => {
+        // Move the dragged item to its new place, just before the artist in the drop box
+        if ([dropId, movedId].includes(artist._id)) {
+          return artist._id === dropId
+            ? [
+                [
+                  ...acc,
+                  {
+                    ...movedArtist,
+                    rank: moveDown ? artist.rank - 1 : artist.rank
+                  },
+                  {
+                    ...artist,
+                    ...!moveDown && { rank: artist.rank + 1 }
+                  }
+                ],
+                [
+                  ...toUpdate,
+                  {
+                    _id: movedArtist._id,
+                    name: movedArtist.name,
+                    rank: moveDown ? artist.rank - 1 : artist.rank
+                  },
+                  {
+                    _id: artist._id,
+                    name: artist.name,
+                    rank: moveDown ? artist.rank : artist.rank + 1
+                  }
+                ]
+              ]
+            : [acc, toUpdate]
+        }
+
+        // Be sure to update only items in the slice between
+        // the two updated items, whatever the direction
+        const isInSlice = moveDown
+          ? artist.rank < dropRank && artist.rank > movedArtist.rank
+          : artist.rank > dropRank && artist.rank < movedArtist.rank
+
+        const updatedArtist = {
+          ...artist,
+          rank: moveDown ? artist.rank - 1 : artist.rank + 1
+        }
+
+        return [
+          [
+            ...acc,
+            ...isInSlice ? [updatedArtist] : [artist]
+          ],
+          [
+            ...toUpdate,
+            ...isInSlice ? [{ _id: updatedArtist._id, name: updatedArtist.name, rank: updatedArtist.rank }] : []
+          ]
+        ]
+      }, [[], []])
+
+      this.artists = artists
+
+      // artists.forEach((art) => {
+      //   console.log('art.rank ===> ', art.rank)
+      // })
+
+      // console.log('toUpdate ===> ', toUpdate)
+
+      // const artistsToUpdate = this.artists
+      //   .filter(art => art.rank >= rank)
+      //   .map(art => ({ _id: art._id, rank: art.rank }))
+
+      this.updateArtistsRanks(toUpdate)
     }
   }
 }

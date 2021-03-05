@@ -46,7 +46,17 @@
       background-color: $secondary;
     }
 
+    .drop-zone {
+      &.hovered {
+        border-top: 1px solid $primary;
+      }
+    }
+
     .v-list-item {
+      &.invisible {
+        display: none;
+      }
+
       &__title {
         color: $primary;
         font-size: 1rem;

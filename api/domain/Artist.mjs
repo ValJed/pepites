@@ -2,6 +2,7 @@ export default ({
   artist: {
     name,
     genre,
+    rank,
     content,
     img,
     socialLinks,
@@ -15,6 +16,7 @@ export default ({
   return {
     name,
     genre,
+    rank,
     content,
     img: newImg || img,
     socialLinks,

@@ -53,7 +53,7 @@ export default {
     return {
       artists: [],
       infos: {},
-      diamondsNumber: new Array(50),
+      diamondsNumber: new Array(30),
       showDiamonds: false,
       showArtists: false,
       showHeader: false,
@@ -111,8 +111,8 @@ export default {
 
       this.showDiamonds = true
 
-      setInterval(() => {
-        diamonds.forEach((diamond) => {
+      diamonds.forEach((diamond) => {
+        setInterval(() => {
           if (!diamond.classList.contains('hovered')) {
             diamond.style.bottom = `${parseInt(diamond.style.bottom, 10) - 3}px`
 
@@ -121,8 +121,8 @@ export default {
               diamond.style.left = `${Math.floor(Math.random() * Math.floor(screenWidth))}px`
             }
           }
-        })
-      }, 20)
+        }, 20)
+      })
     }
   }
 }
