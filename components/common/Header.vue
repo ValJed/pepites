@@ -1,10 +1,32 @@
 <template>
   <header :class="{'home-page': isHome}">
     <!-- <v-container> -->
-    <nuxt-link class="logo" :to="'/'">
-      <FullLogoSvg v-if="isHome" />
-      <LogoSvg v-else />
-    </nuxt-link>
+    <nav :class="{}">
+      <nuxt-link class="logo" :to="'/'">
+        <FullLogoSvg v-if="isHome" />
+        <LogoSvg v-else />
+      </nuxt-link>
+      <ul
+        v-if="artists"
+        class="artists-menu"
+      >
+        <li
+          v-for="art in artists"
+          :key="art._id"
+          class="artists-menu-item"
+        >
+          <nuxt-link :to="`/${art._id}`">
+            <!-- <div
+              :style="{
+                backgroundImage: `url(${serverUrl}/public/uploads/${art.img})`
+              }"
+            /> -->
+            <h4>{{ art.name }}</h4>
+            <DiamondSvg />
+          </nuxt-link>
+        </li>
+      </ul>
+    </nav>
     <div class="links">
       <!-- <ul>
         <li>Contact</li>
@@ -38,13 +60,15 @@
 </template>
 
 <script>
-import FullLogoSvg from '~/assets/svg/pep-logo2.svg'
-import LogoSvg from '~/assets/svg/pep-logo1.svg'
+import FullLogoSvg from '@/assets/svg/pep-logo2.svg'
+import LogoSvg from '@/assets/svg/pep-logo1.svg'
+import DiamondSvg from '@/assets/svg/pep-diamond-secondary.svg'
 
 export default {
   components: {
     FullLogoSvg,
-    LogoSvg
+    LogoSvg,
+    DiamondSvg
   },
   props: {
     // show: {
@@ -59,12 +83,18 @@ export default {
     socialLinks: {
       type: Object,
       required: true
+    },
+    artists: {
+      type: Array,
+      required: false,
+      default: null
     }
   },
   data: () => ({
     facebookLink: '',
     instagramLink: '',
-    youtubeLink: ''
+    youtubeLink: '',
+    serverUrl: process.env.serverUrl
   })
 }
 </script>

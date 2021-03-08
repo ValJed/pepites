@@ -1,6 +1,6 @@
 <template>
   <div class="page-artist">
-    <Header :social-links="infos.socialLinks" />
+    <Header :social-links="infos.socialLinks" :artists="artists" />
     <v-container>
       <v-row>
         <v-col
@@ -128,13 +128,30 @@ export default {
     SocialLinks
   },
   async asyncData (context) {
-    const artist = await context.app.$axios.$get(`/artists/${context.params.artist}`)
+    // const artist = await context.app.$axios.$get(`/artists/${context.params.artist}`)
+    const allArtists = await context.app.$axios.$get('/artists')
+
     const infos = await context.app.$axios.$get('/infos')
 
-    return { artist, infos }
+    const { artists, artist } = allArtists.reduce(({ artists, artist }, art) => {
+      return {
+        ...art._id === context.params.artist
+          ? { artist: art, artists }
+          : {
+              artist,
+              artists: [
+                ...artists,
+                art
+              ]
+            }
+      }
+    }, { artists: [], artist: null })
+
+    return { artist, artists, infos }
   },
   data: () => ({
     artist: null,
+    artists: [],
     infos: null,
     serverUrl: process.env.serverUrl
   }),

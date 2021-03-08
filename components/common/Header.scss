@@ -35,24 +35,92 @@ header {
 
   &:not(.home-page) {
     .logo {
-      position: fixed;
-      top: 0;
+      position: relative;
       left: -1rem;
-      z-index: 99;
+
+
+    }
+
+    nav {
+      position: fixed;
       top: .3rem;
+      left: 0;
+      z-index: 99;
 
       &:hover {
-        left: .3rem;
-        box-shadow: 3px 3px 3px 3px rgb(0, 0, 0, .8);
-        border-radius: 50% 50% 50% 50%;
+        .logo {
+          left: .3rem;
+          box-shadow: 3px 3px 3px 3px rgb(0, 0, 0, .8);
+          border-radius: 50% 50% 50% 50%;
+        }
+
+        .artists-menu {
+          left: 0;
+        }
+      }
+
+      .artists-menu {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        left: -8rem;
+        // left: 0;
+        width: 8rem;
+        transition: left .3s ease;
+
+        &-item {
+          position: relative;
+          width: 6rem;
+          height: 6rem;
+
+          > a {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          h4 {
+            text-align: right;
+            font-size: 1.2rem;
+            text-align: center;
+          }
+
+          div {
+            width: 100%;
+            height: 6rem;
+            border-radius: 50%;
+            border: solid 4px $primary;
+            background-position: center;
+            background-size: cover;
+          }
+
+          svg {
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            transform: rotate(51deg);
+            top: -10%;
+            left: -10%;
+            z-index: -1;
+          }
+        }
+
+        &:hover {
+          ul {
+            left: 0;
+          }
+        }
       }
     }
   }
 
   .links {
     position: fixed;
-    top: .5rem;
-    right: .5rem;
+    top: 1rem;
+    right: 1rem;
 
     .social-links {
       display: flex;
@@ -78,5 +146,4 @@ header {
       }
     }
   }
-  // }
 }
