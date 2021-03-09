@@ -111,18 +111,22 @@ export default {
 
       this.showDiamonds = true
 
-      diamonds.forEach((diamond) => {
-        setInterval(() => {
-          if (!diamond.classList.contains('hovered')) {
-            diamond.style.bottom = `${parseInt(diamond.style.bottom, 10) - 3}px`
+      requestAnimationFrame(animateDiamonds)
 
-            if (parseInt(diamond.style.bottom) < -40) {
+      function animateDiamonds () {
+        diamonds.forEach((diamond) => {
+          if (!diamond.classList.contains('hovered')) {
+            diamond.style.bottom = `${parseInt(diamond.style.bottom, 10) - 2}px`
+
+            if (parseInt(diamond.style.bottom) < -90) {
               diamond.style.bottom = `${screenHeight}px`
               diamond.style.left = `${Math.floor(Math.random() * Math.floor(screenWidth))}px`
             }
           }
-        }, 20)
-      })
+        })
+
+        requestAnimationFrame(animateDiamonds)
+      }
     }
   }
 }

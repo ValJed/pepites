@@ -130,7 +130,9 @@ export default ({
     async (req, res) => {
       try {
         const { artists } = req.body
-        console.log('artists ===> ', artists)
+
+        await artistService.updateRanks(artists)
+
         res.status(200).send()
       } catch (err) {
         res.status(err.status || 500).send(err.error || err)

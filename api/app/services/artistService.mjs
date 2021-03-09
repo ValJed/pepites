@@ -88,10 +88,27 @@ export default ({
     }
   }
 
+  const updateRanks = async (artists) => {
+    const promises = artists.map(({ _id, rank }) => {
+      return artistRepo.update(_id, { rank })
+    })
+
+    const errorsIds = (await Promise.all(promises))
+      .reduce((acc, { value }) => value ? acc : [...acc, value._id], [])
+
+    if (errorsIds.length) {
+      throw {
+        status: 500,
+        error: `Some artists haven't been updated : ${errorsIds.join(', ')}`
+      }
+    }
+  }
+
   return {
     getArtists,
     addArtist,
     updateArtist,
-    deleteArtist
+    deleteArtist,
+    updateRanks
   }
 }

@@ -78,12 +78,13 @@
             :key="artist.id"
             class="drop-zone"
             @drop="onDrop($event, artist._id, artist.rank)"
-            @dragenter.prevent="dragEnter"
-            @dragleave.prevent="dragLeave"
+            @dragenter.prevent.stop="dragEnter"
+            @dragleave.prevent.stop="dragLeave"
             @dragover.prevent
           >
             <v-list-item
               draggable
+              height="100%"
               @dragstart="dragStart($event, artist)"
               @dragend="dragEnd"
               @click="selectArtist(artist)"
@@ -365,37 +366,45 @@ export default {
       dataTransfer.effectAllowed = 'move'
       dataTransfer.setData('movedId', item._id)
       setTimeout(() => {
-        target.classList.add('invisible')
+        target.parentNode.classList.add('invisible')
       }, 0)
     },
 
     async updateArtistsRanks (artists) {
-      const { status, data } = await this.$axios.put('/artists/ranks', { artists })
+      try {
+        const { status } = await this.$axios.put('/artists/ranks', { artists })
 
-      console.log('status ===> ', status)
-      console.log('data ===> ', data)
+        if (status === 200) {
+          this.snackbar.msg = 'Updated'
+          this.snackbar.show = true
+        }
+      } catch ({ response }) {
+        this.snackbar.msg = response.data
+        this.snackbar.show = true
+      }
     },
 
     dragEnd ({ target }) {
-      target.classList.remove('invisible')
+      target.parentNode.classList.remove('invisible')
+      document.querySelectorAll('.drop-zone').forEach((elem) => {
+        elem.classList.remove('hovered')
+      })
     },
 
     dragEnter ({ target, currentTarget }) {
-      if (target.classList && target.classList.contains('drop-zone')) {
+      if (target.classList && target.classList.contains('v-list-item__title')) {
         currentTarget.classList.add('hovered')
       }
     },
 
     dragLeave ({ target, currentTarget }) {
-      if (target.classList && target.classList.contains('drop-zone')) {
+      if (target.classList && target.classList.contains('v-list-item__title')) {
         currentTarget.classList.remove('hovered')
       }
     },
 
     onDrop ({ dataTransfer }, dropId, dropRank) {
       const movedId = dataTransfer.getData('movedId')
-
-      // const movedItem = this.artists
       const movedArtist = this.artists.find(art => art._id === movedId)
       const moveDown = movedArtist.rank < dropRank
 
@@ -423,12 +432,10 @@ export default {
                   ...toUpdate,
                   {
                     _id: movedArtist._id,
-                    name: movedArtist.name,
                     rank: moveDown ? artist.rank - 1 : artist.rank
                   },
                   {
                     _id: artist._id,
-                    name: artist.name,
                     rank: moveDown ? artist.rank : artist.rank + 1
                   }
                 ]
@@ -454,22 +461,14 @@ export default {
           ],
           [
             ...toUpdate,
-            ...isInSlice ? [{ _id: updatedArtist._id, name: updatedArtist.name, rank: updatedArtist.rank }] : []
+            ...isInSlice
+              ? [{ _id: updatedArtist._id, name: updatedArtist.name, rank: updatedArtist.rank }]
+              : []
           ]
         ]
       }, [[], []])
 
       this.artists = artists
-
-      // artists.forEach((art) => {
-      //   console.log('art.rank ===> ', art.rank)
-      // })
-
-      // console.log('toUpdate ===> ', toUpdate)
-
-      // const artistsToUpdate = this.artists
-      //   .filter(art => art.rank >= rank)
-      //   .map(art => ({ _id: art._id, rank: art.rank }))
 
       this.updateArtistsRanks(toUpdate)
     }

@@ -47,12 +47,20 @@
     }
 
     .drop-zone {
+      // padding: .3rem;
+      border-top: solid 2px $secondary;
+
+      &.invisible {
+        display: none;
+      }
+
       &.hovered {
-        border-top: 1px solid $primary;
+        border-top: dashed 2px $primary;
       }
     }
 
     .v-list-item {
+      height: 2.5rem;
       &.invisible {
         display: none;
       }
@@ -61,6 +69,8 @@
         color: $primary;
         font-size: 1rem;
         font-weight: 500;
+        height: 100%;
+        line-height: 2.5rem!important;
       }
     }
 
