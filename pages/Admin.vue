@@ -183,7 +183,13 @@ export default {
     EditUsers
   },
 
-  // middleware: 'auth',
+  async middleware ({ app, redirect }) {
+    try {
+      await app.$axios.get('verify')
+    } catch (err) {
+      return redirect('/')
+    }
+  },
 
   async asyncData (context) {
     const artists = await context.app.$axios.$get('/artists')
