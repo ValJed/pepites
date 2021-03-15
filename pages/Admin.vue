@@ -14,7 +14,9 @@
               Home
             </nuxt-link>
           </li>
-          <li>Logout</li>
+          <li @click="logout">
+            Logout
+          </li>
         </ul>
       </div>
     </v-app-bar>
@@ -174,11 +176,15 @@ import EditInfos from '@/components/admin/EditInfos'
 import EditUsers from '@/components/admin/EditUsers'
 
 export default {
+
   components: {
     EditArtist,
     EditInfos,
     EditUsers
   },
+
+  // middleware: 'auth',
+
   async asyncData (context) {
     const artists = await context.app.$axios.$get('/artists')
     const infos = await context.app.$axios.$get('/infos')
@@ -471,6 +477,14 @@ export default {
       this.artists = artists
 
       this.updateArtistsRanks(toUpdate)
+    },
+
+    logout () {
+      document.cookie = 'pep-token=;'
+
+      if (this.$router.currentRoute.name === 'Admin') {
+        this.$router.push('/')
+      }
     }
   }
 }
