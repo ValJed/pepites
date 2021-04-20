@@ -120,6 +120,48 @@
             v-text="'mdi-format-quote-close'"
           />
         </button>
+
+        <v-dialog
+          max-width="350"
+        >
+          <template #activator="{ on, attrs }">
+            <button
+              v-bind="attrs"
+              class="menubar__button"
+              :class="{ 'is-active': isActive.link() }"
+              v-on="!isActive.link() && on"
+              @click="isActive.link() && setLinkUrl(commands.link)"
+            >
+              <v-icon
+                color="primary"
+                v-text="'mdi-link-variant-plus'"
+              />
+            </button>
+          </template>
+          <template #default="dialog">
+            <v-card>
+              <v-form @submit.prevent="dialog.value = '', setLinkUrl(commands.link, linkUrl)">
+                <v-card-text class="headline">
+                  Add a link
+                  <v-text-field
+                    v-model="linkUrl"
+                    required
+                  />
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn
+                    type="submit"
+                    color="primary"
+                    text
+                  >
+                    Yes
+                  </v-btn>
+                </v-card-actions>
+              </v-form>
+            </v-card>
+          </template>
+        </v-dialog>
       </div>
     </editor-menu-bar>
     <editor-content
@@ -192,7 +234,8 @@ export default {
 
           this.updateContent(content)
         }
-      })
+      }),
+      linkUrl: ''
     }
   },
   watch: {
@@ -203,6 +246,15 @@ export default {
 
   beforeDestroy () {
     this.editor.destroy()
+  },
+  methods: {
+    setLinkUrl (command, url = '') {
+      command({ href: url })
+      this.linkUrl = ''
+    },
+    removeLink (commands) {
+      commands({ href: '' })
+    }
   }
 }
 </script>

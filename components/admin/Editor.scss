@@ -3,6 +3,14 @@
     color: $primary;
     font-weight: 600;
     font-size: 1.2rem;
+
+    button {
+      box-sizing: border-box;
+
+      &.is-active {
+        background-color: $secondary;
+      }
+    }
   }
   .editor-content {
     padding-top: 2rem;

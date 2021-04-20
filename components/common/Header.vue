@@ -15,7 +15,7 @@
           :key="art._id"
           class="artists-menu-item"
         >
-          <nuxt-link :to="`/${art._id}`">
+          <nuxt-link :to="`/artists/${art._id}`">
             <!-- <div
               :style="{
                 backgroundImage: `url(${serverUrl}/public/uploads/${art.img})`
